@@ -20,7 +20,7 @@
                 url('https://images.unsplash.com/photo-1505635552518-3448ff116af3?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            color: #00ff7f;
+            color: #00ff7f; /* Asosiy rang yashil-qora vibe uchun */
             font-family: 'Roboto', sans-serif;
             height: 100vh;
             display: flex;
@@ -28,97 +28,83 @@
             align-items: center;
             overflow: hidden;
             position: relative;
-            transition: background-color 0.1s; 
         }
 
-        .window-glass {
+        /* Qon tomchilari yozayotganda oqib tushadi */
+        .blood-drop {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
-        }
-
-        .glitch-effect {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 20, 0, 0.1),
-                rgba(0, 20, 0, 0.1) 2px,
-                transparent 2px,
-                transparent 4px
-            );
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .rain-drop {
-            position: absolute;
-            width: 3px;
-            height: 15px;
-            background: linear-gradient(to bottom, rgba(0,255,127,0), rgba(0,255,127,0.5), rgba(0,255,127,0.8));
-            border-radius: 0 0 50% 50%;
-            animation: rainFall linear forwards;
+            width: 4px;
+            height: 25px;
+            background: linear-gradient(to bottom, rgba(139,0,0,0), rgba(200,0,0,0.8), rgba(255,0,0,1));
+            border-radius: 50%;
+            animation: dropFall linear forwards;
             z-index: 5;
             pointer-events: none;
             opacity: 0;
-            filter: drop-shadow(0 0 2px #00ff7f);
+            filter: drop-shadow(0 0 3px #ff0000);
         }
 
-        @keyframes rainFall {
+        @keyframes dropFall {
             0% { top: -20px; opacity: 0; height: 10px;}
-            10% { opacity: 0.8; height: 30px;}
-            80% { opacity: 0.6; height: 80px;}
-            100% { top: 110vh; opacity: 0; height: 150px; }
+            10% { opacity: 0.9; height: 40px;}
+            80% { opacity: 0.8; height: 100px;}
+            100% { top: 110vh; opacity: 0; height: 200px; }
         }
 
+        /* --- Jumpscare (Oxirgi qonli ekran) --- */
         #jumpscare-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #8b0000;
-            /* Qon sachrashiga o'xshash CSS gradientlar */
-            background-image: 
-                radial-gradient(circle at 50% 50%, #ff0000 0%, transparent 60%),
-                radial-gradient(circle at 20% 30%, #cc0000 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, #990000 0%, transparent 50%),
-                radial-gradient(circle at 30% 80%, #aa0000 0%, transparent 45%);
+            background-color: #aa0000;
             z-index: 9999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            animation: bloodSplash 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, shake 0.5s infinite;
+            overflow: hidden;
+            animation: intenseShake 0.1s infinite;
         }
 
-        @keyframes bloodSplash {
-            0% { transform: scale(0.1); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .blood-splatter {
+            position: absolute;
+            background: radial-gradient(circle, #ff0000 0%, #8b0000 40%, transparent 70%);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            opacity: 0;
+            animation: splashOut 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        @keyframes splashOut {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0.9; }
         }
 
         #jumpscare-overlay h1 {
             font-family: 'Nosifer', cursive;
             font-size: 80px;
             color: #000;
-            text-shadow: 0 0 20px #fff;
+            text-shadow: 0 0 30px #fff, 0 0 50px #ff0000;
             text-transform: uppercase;
             text-align: center;
+            z-index: 10001;
+            animation: popText 0.3s ease-out forwards;
         }
 
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        @keyframes popText {
+            0% { transform: scale(0.1); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
+        @keyframes intenseShake {
+            0% { transform: translate(3px, 3px) rotate(0deg); }
+            25% { transform: translate(-3px, -4px) rotate(-1deg); }
+            50% { transform: translate(-4px, 2px) rotate(1deg); }
+            75% { transform: translate(4px, -2px) rotate(-1deg); }
+            100% { transform: translate(-2px, 3px) rotate(0deg); }
+        }
+
+        /* --- Asosiy oyna dizayni --- */
         #start-btn {
             padding: 20px 50px;
             font-size: 26px;
@@ -155,7 +141,6 @@
             max-width: 600px;
             text-align: center;
             animation: fadeIn 1.5s ease-in;
-            position: relative;
         }
 
         @keyframes fadeIn {
@@ -163,7 +148,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 {
+        #generator-modal h1 {
             font-family: 'Creepster', cursive;
             font-size: 40px;
             color: #00ff7f;
@@ -187,9 +172,9 @@
         }
 
         input:focus {
-            border-color: #00ff7f;
-            box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
-            background: #0f1f0f;
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            background: #1a0505;
         }
 
         #generate-btn {
@@ -232,10 +217,10 @@
         }
         
         .highlight {
-            color: #00ff7f;
+            color: #ff3333;
             font-weight: bold;
             font-size: 24px;
-            text-shadow: 0 0 15px #00ff7f;
+            text-shadow: 0 0 15px #ff0000;
         }
 
         .name-highlight {
@@ -254,7 +239,6 @@
             font-size: 18px;
             font-style: italic;
             color: #55aa55;
-            text-shadow: none;
             text-align: right;
         }
         
@@ -271,9 +255,6 @@
     </style>
 </head>
 <body>
-
-    <div class="window-glass"></div>
-    <div class="glitch-effect"></div>
 
     <div id="audio-container" style="display:none;"></div>
 
@@ -303,33 +284,25 @@
         let attempts = 0; 
         const MAX_ATTEMPTS = 3;
         
-        const apiKey = ""; 
-        // Generativelanguage API endpoint updated for Canvas environment
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-        function createRainDrop() {
+        function createBloodDrop() {
             const drop = document.createElement('div');
-            drop.classList.add('rain-drop');
+            drop.classList.add('blood-drop');
             drop.style.left = Math.random() * 100 + 'vw';
             
             const sizeMultiplier = Math.random() * 1.5 + 0.5;
             drop.style.transform = `scale(${sizeMultiplier})`;
             
-            drop.style.animationDuration = (Math.random() * 2 + 1) + 's'; 
-            
-            drop.style.animationDelay = Math.random() * 0.5 + 's';
+            drop.style.animationDuration = (Math.random() * 1.5 + 0.8) + 's'; 
             
             document.body.appendChild(drop);
-            
-            setTimeout(() => { drop.remove(); }, 3500);
+            setTimeout(() => { drop.remove(); }, 2500);
         }
 
-        setInterval(createRainDrop, 150);
-
+        // Qon faqat inputlarga nimadir yozilganda ekrandan oqib tushadi
         inputs.forEach(input => {
             input.addEventListener('input', () => {
                 for(let i=0; i<3; i++) {
-                    createRainDrop();
+                    createBloodDrop();
                 }
             });
         });
@@ -349,8 +322,9 @@
             let yearsLeft = maxLifespan - currentAge;
             if (yearsLeft < 1) yearsLeft = 1; 
 
-            if (Math.random() < 0.2 && yearsLeft > 10) {
-                yearsLeft = Math.floor(Math.random() * 10) + 1;
+            // Tasodifiy erta o'lim ehtimoli
+            if (Math.random() < 0.25 && yearsLeft > 5) {
+                yearsLeft = Math.floor(Math.random() * 5) + 1;
             }
 
             const randomDaysLeft = Math.floor(Math.random() * (yearsLeft * 365));
@@ -368,45 +342,80 @@
             modal.style.display = 'none';
             jumpscareOverlay.style.display = 'flex';
             
-            // Jumpscare audiosini qo'shamiz va avtomatik chalamiz
+            // Orqadagi YouTube musiqasini o'chirib, Dahshatli qichqiriqni yoqamiz
             audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/4JvJd6BkBJ4?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
-        }
-
-        async function fetchStoryFromGemini(name, dateData) {
-            const prompt = `Sen sirli va dahshatli taqdirni aytib beruvchi tilsan.
-            Mijozning ismi: ${name}. 
-            Uning o'lim yoshi: ${dateData.deathAge}.
-            Vazifa: Bu odam aynan shu yoshida qanday qilib va qayerda fojiali tarzda o'lishi haqida o'zbek tilida 2-3 gapdan iborat qisqa, mikstik va juda qo'rqinchli hikoya yozib ber. 
-            Hikoya uning ismini aytib, bevosita unga murojaat qilish bilan boshlanishi kerak (Masalan: "Asadbek, sen...").
-            Hech qanday salomlashish, tushuntirish yoki ortiqcha so'zlar bo'lmasin. Faqat hikoyani o'zini qaytar.`;
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: {
-                    parts: [{ text: "Siz qisqa, qo'rqinchli va sirli hikoyalar yozuvchisisiz. Faqat so'ralgan ma'lumotni o'zbek tilida qaytarasiz." }]
-                }
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    return data.candidates[0].content.parts[0].text;
-                } else {
-                    throw new Error("Invalid response from Gemini");
-                }
-            } catch (error) {
-                console.error("Gemini API xatosi:", error);
-                return `${name}, seni qorong'i o'rmon qa'rida, ismingni chaqirayotgan noma'lum sharpalar qurshovida topishadi. Nafasing uzilayotganda faqat sovuq shamol ovozini eshitasan.`;
+            
+            // Ekranga qon dog'larini sachratamiz
+            for(let i=0; i<30; i++) {
+                let splatter = document.createElement('div');
+                splatter.classList.add('blood-splatter');
+                splatter.style.width = (Math.random() * 200 + 100) + 'px';
+                splatter.style.height = (Math.random() * 200 + 100) + 'px';
+                splatter.style.left = (Math.random() * 100 - 10) + 'vw';
+                splatter.style.top = (Math.random() * 100 - 10) + 'vh';
+                splatter.style.animationDelay = (Math.random() * 0.2) + 's';
+                jumpscareOverlay.appendChild(splatter);
             }
         }
 
-        generateBtn.addEventListener('click', async () => {
+        const storyParts = {
+            locations: [
+                "kimsasiz va qorong'i qabristonda", "eski, zax va tashlandiq shifoxonada", 
+                "uzoq yillik qorong'i yerto'la qa'rida", "qalin va sovuq o'rmon o'rtasida", 
+                "jimjit va izg'irinli daryo bo'yida", "tungi soat uchda o'z yotog'ingda", 
+                "zanglagan eski lift ichida qamalib", "qon hidi anqib turgan omborxonada",
+                "yomg'irli kunda kimsasiz bekatingizda", "buzilib yotgan cherkov xarobalarida",
+                "oy nuri umuman tushmaydigan tor ko'chada", "oynalari siniq eski qasrda",
+                "kimsasiz cho'l o'rtasida", "qop-qorong'i metro tunneli ostida",
+                "hech kim yashamaydigan huvillagan qishloqda", "chirigan yog'och uyning chardog'ida",
+                "ko'zgular bilan qoplangan telbalar xonasida", "qonli vannada", 
+                "jarlik yoqasida", "zaharli gazlarga to'la zavod ichida"
+            ],
+            events: [
+                "noma'lum qora sharpa ortingdan kelib tomog'ingdan bo'g'adi",
+                "ko'zgudan uzatilgan chirigan qo'llar seni o'ziga tortib ketadi",
+                "devordan sizib chiqqan qonli sharpalar seni o'rab oladi",
+                "yer to'satdan yorilib, tubsiz zulmat olovi seni yutib yuboradi",
+                "o'zingning soyang tirilib, senga hujum qiladi va tanangni parchalaydi",
+                "ko'zlari qonga to'lgan yuzsiz mavjudot tiriklayin yuragingni sug'urib oladi",
+                "minglab qora o'rgimchaklar tanangni yorib kirib, ichingni kemirib bitiradi",
+                "deraza ortidan qarab turgan jinlar aql-hushingni olib, o'z joniga qasd qilishga majburlaydi",
+                "osmondan tushgan olovli meteorit vujudingni kulga aylantiradi",
+                "eski la'nat uyg'onib, bir soniyada butun qoningni muzlatib qo'yadi",
+                "yer ostidan chiqqan murdalar oyoqlaringdan tortib, o'zlari bilan go'rga tiqadi",
+                "noma'lum qora virus bir necha daqiqada suyaklaringni eritib yuboradi",
+                "ko'zga ko'rinmas shafqatsiz pichoqlar butun tanangni tilkalab tashlaydi",
+                "sovuq tuman ichidan chiqqan maxluq seni burda-burda qilib yeydi",
+                "do'zax itlari iskaragi seni quvib yetib tomog'ingni g'ajib tashlaydi",
+                "o'z yaqining qiyofasiga kirgan shayton seni sovuqqonlik bilan so'yib tashlaydi",
+                "shiftda yashiringan ko'rshapalak-odam tepangdan sakrab boshingni uzib oladi",
+                "bo'yningga sirtmoq tashlagan ko'rinmas kuch seni osib qo'yadi",
+                "vujuding o'z-o'zidan yonishni boshlaydi va tiriklayin jizzig'ing chiqadi",
+                "ongingni egallab olgan iblis seni eng baland binodan sakrashga undaydi"
+            ],
+            conclusions: [
+                "Nafasing uzilayotganda faqatgina o'z xirillashingni eshitasan.",
+                "Sening dod-faryodingni hech kim, hech qachon eshitmaydi.",
+                "Ko'zlaring dahshatdan ochiq qotib qoladi.",
+                "Jonsiz va parchalangan tanang hech qachon topilmaydi.",
+                "Ruhing o'sha zax joyda abadiy azob chekib sargardon qoladi.",
+                "Oxirgi ko'rgan narsang o'zingning qonga belangan qo'llaring bo'ladi.",
+                "Bu azob hatto o'limingdan keyin ham asrlar davom etadi.",
+                "Seni eslaganlar faqatgina qora tushlarida ko'rib, dahshatga tushishadi.",
+                "O'lim farishtasi joningni eng shafqatsiz usulda sug'urib oladi.",
+                "Qoning yerga singib, o'sha joy abadiy la'natlangan maskanga aylanadi."
+            ]
+        };
+
+        function generateUniqueStory(name) {
+            const loc = storyParts.locations[Math.floor(Math.random() * storyParts.locations.length)];
+            const evt = storyParts.events[Math.floor(Math.random() * storyParts.events.length)];
+            const conc = storyParts.conclusions[Math.floor(Math.random() * storyParts.conclusions.length)];
+            
+            return `${name}, sen ${loc}, kutilmaganda ${evt}. ${conc}`;
+        }
+
+        generateBtn.addEventListener('click', () => {
             if (attempts >= MAX_ATTEMPTS) {
                 triggerJumpscare();
                 return;
@@ -416,7 +425,7 @@
             const ageInput = document.getElementById('userAge').value;
             
             if (!name || !ageInput) {
-                resultDiv.innerHTML = "<span style='color:#ff0000;'>Ism va yoshingizni kiritishingiz shart...</span>";
+                resultDiv.innerHTML = "<span style='color:#ff0000;'>Ism va yoshingizni kiritishingiz shart... Hali vaqtingiz bor.</span>";
                 return;
             }
 
@@ -426,10 +435,10 @@
             generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
             resultDiv.innerHTML = "<div class='loading-text'>Taqdir kitobi varaqlanmoqda...</div>";
 
-            try {
+            // Simulyatsiya qilingan kechikish (Go'yoki AI o'ylayotgandek)
+            setTimeout(() => {
                 const dateData = calculateDeathDate(currentAge);
-                
-                const story = await fetchStoryFromGemini(name, dateData);
+                const story = generateUniqueStory(name);
 
                 resultDiv.innerHTML = `
                     <span class="name-highlight">${name}</span>
@@ -445,17 +454,11 @@
                     generateBtn.textContent = "So'nggi haqiqat";
                     generateBtn.style.backgroundColor = "#800000"; 
                     generateBtn.style.color = "#fff";
-                }
-            } catch (error) {
-                 resultDiv.innerHTML = "<span style='color:#ff0000;'>Zulmat bilan aloqa uzildi. Qaytadan urinib ko'ring.</span>";
-            } finally {
-                if (attempts < MAX_ATTEMPTS) {
+                } else {
                     generateBtn.disabled = false;
                     generateBtn.textContent = "O'lim generatori";
-                } else {
-                     generateBtn.disabled = false;
                 }
-            }
+            }, 1500);
         });
     </script>
 </body>
