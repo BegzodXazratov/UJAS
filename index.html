@@ -14,14 +14,12 @@
         }
 
         body {
-            background-color: #000000;
-            /* Fon rasmi qizil o'rniga yashil-qora o'rmon rasmi bilan almashtirildi */
+            background-color: #000;
             background-image: 
-                linear-gradient(to bottom, rgba(0,20,0,0.8), rgba(0,0,0,1)),
-                url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=2070&auto=format&fit=crop');
+                linear-gradient(to bottom, rgba(0, 30, 0, 0.7), rgba(0, 0, 0, 1)),
+                url('https://images.unsplash.com/photo-1505635552518-3448ff116af3?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            /* Asosiy matn rangi yashil qilindi */
             color: #00ff7f;
             font-family: 'Roboto', sans-serif;
             height: 100vh;
@@ -30,16 +28,17 @@
             align-items: center;
             overflow: hidden;
             position: relative;
+            /* We'll change this to red in JS for the jumpscare */
+            transition: background-color 0.1s; 
         }
 
-        /* Eski blood-overlay olib tashlandi, o'rniga rain-overlay qo'shildi */
-        .rain-overlay {
+        .window-glass {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
-            /* Oynadagi yomg'ir effekti uchun filtr */
-            backdrop-filter: blur(2px);
+            /* Makes it look like we are looking through a wet, dirty window */
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
         }
 
         .glitch-effect {
@@ -56,32 +55,66 @@
             z-index: 2;
         }
 
-        /* Yangi qon (yomg'ir izi) animatsiyasi */
-        .rain-streak {
+        .rain-drop {
             position: absolute;
-            top: -100px;
-            width: 2px;
-            background: linear-gradient(to bottom, rgba(255,0,0,0), rgba(200,0,0,0.8), rgba(139,0,0,1));
-            border-radius: 50%;
-            /* Soyalar yashil rangga moslandi */
-            box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
-            animation: streakFall linear forwards;
+            width: 3px;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(0,255,127,0), rgba(0,255,127,0.5), rgba(0,255,127,0.8));
+            border-radius: 0 0 50% 50%;
+            animation: rainFall linear forwards;
             z-index: 5;
             pointer-events: none;
             opacity: 0;
+            filter: drop-shadow(0 0 2px #00ff7f);
         }
 
-        @keyframes streakFall {
-            0% { top: -50px; height: 20px; opacity: 0.1; }
-            20% { opacity: 0.8; }
-            100% { top: 110vh; height: 150px; opacity: 0; }
+        @keyframes rainFall {
+            0% { top: -20px; opacity: 0; height: 10px;}
+            10% { opacity: 0.8; height: 30px;}
+            /* Simulate sliding down a window, leaving a trail */
+            80% { opacity: 0.6; height: 80px;}
+            100% { top: 110vh; opacity: 0; height: 150px; }
+        }
+
+        #jumpscare-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #ff0000;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: shake 0.5s infinite;
+        }
+
+        #jumpscare-overlay h1 {
+            font-family: 'Nosifer', cursive;
+            font-size: 80px;
+            color: #000;
+            text-shadow: 0 0 20px #fff;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
         #start-btn {
             padding: 20px 50px;
             font-size: 26px;
             font-family: 'Nosifer', cursive;
-            /* Tugma ranglari yashil rangga o'zgartirildi */
             color: #006400;
             background: rgba(0, 20, 0, 0.6);
             border: 2px solid #006400;
@@ -104,15 +137,14 @@
         #generator-modal {
             display: none;
             flex-direction: column;
-            /* Modal foni va chegarasi yashil rangga moslandi */
-            background: rgba(0, 10, 0, 0.95);
+            background: rgba(0, 15, 0, 0.95); /* Darker green background */
             border: 1px solid #004d00;
             padding: 40px;
             border-radius: 15px;
             z-index: 10;
             box-shadow: 0 0 60px rgba(0, 255, 127, 0.2);
             width: 90%;
-            max-width: 550px;
+            max-width: 600px;
             text-align: center;
             animation: fadeIn 1.5s ease-in;
             position: relative;
@@ -126,7 +158,6 @@
         h1 {
             font-family: 'Creepster', cursive;
             font-size: 40px;
-            /* Sarlavha rangi va soyasi yashil qilindi */
             color: #00ff7f;
             margin-bottom: 30px;
             text-shadow: 3px 3px 10px #000, 0 0 20px #006400;
@@ -137,7 +168,6 @@
             width: 100%;
             padding: 15px;
             margin-bottom: 25px;
-            /* Input maydoni ranglari yashil qilindi */
             background: #0a140a;
             border: 1px solid #003300;
             color: #00ff7f;
@@ -159,26 +189,25 @@
             padding: 15px;
             font-size: 22px;
             font-family: 'Creepster', cursive;
-            color: #fff;
-            /* Generatsiya tugmasi rangi yashil qilindi */
-            background: #006400;
+            color: #000; /* Better contrast */
+            background: #008000;
             border: none;
             cursor: pointer;
             transition: 0.3s;
             letter-spacing: 3px;
             border-radius: 5px;
-            text-shadow: 1px 1px 5px #000;
+            box-shadow: 0 0 10px #00ff7f;
         }
 
         #generate-btn:hover:not(:disabled) {
-            background: #008000;
+            background: #00ff7f;
             box-shadow: 0 0 30px #00ff7f;
             transform: scale(1.02);
         }
 
         #generate-btn:disabled {
-            background: #333;
-            color: #666;
+            background: #113311;
+            color: #336633;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
@@ -186,44 +215,56 @@
 
         #result {
             margin-top: 35px;
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1.6;
             color: #e6e6e6;
-            /* Natija matni soyasi yashil qilindi */
-            text-shadow: 0 0 10px #00ff7f;
+            text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
             min-height: 80px;
+            text-align: left;
         }
         
         .highlight {
-            /* Ta'kidlash ranglari yashil qilindi */
             color: #00ff7f;
             font-weight: bold;
-            font-size: 26px;
+            font-size: 24px;
             text-shadow: 0 0 15px #00ff7f;
         }
 
         .name-highlight {
-            /* Ism ta'kidlash rangi yashil qilindi */
             color: #00ff7f;
             font-family: 'Creepster', cursive;
             font-size: 32px;
             letter-spacing: 1px;
+            display: block;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
         .god-knows {
             display: block;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 18px;
             font-style: italic;
-            color: #888;
+            color: #55aa55;
             text-shadow: none;
+            text-align: right;
+        }
+        
+        .loading-text {
+            color: #00ff7f;
+            font-style: italic;
+            animation: pulse 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Eski blood-overlay o'rniga rain-overlay ishlatildi -->
-    <div class="rain-overlay"></div>
+    <div class="window-glass"></div>
     <div class="glitch-effect"></div>
 
     <div id="audio-container" style="display:none;"></div>
@@ -237,6 +278,10 @@
         <button id="generate-btn">O'lim generatori</button>
         <div id="result"></div>
     </div>
+    
+    <div id="jumpscare-overlay">
+        <h1>YO'QOL MUNOFIQ!</h1>
+    </div>
 
     <script>
         const startBtn = document.getElementById('start-btn');
@@ -245,74 +290,69 @@
         const resultDiv = document.getElementById('result');
         const audioContainer = document.getElementById('audio-container');
         const inputs = document.querySelectorAll('input');
+        const jumpscareOverlay = document.getElementById('jumpscare-overlay');
 
         let attempts = 0; 
-        const currentYear = 2026;
+        const MAX_ATTEMPTS = 3;
         
-        // Gemini API kaliti Canvas tomonidan taqdim etiladi
-        const apiKey = "";
+        const apiKey = ""; // API key will be injected by Canvas
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-        // Yangi qon (yomg'ir izi) yaratish funksiyasi
-        function createRainStreak() {
-            const streak = document.createElement('div');
-            streak.classList.add('rain-streak');
-            streak.style.left = Math.random() * 100 + 'vw';
-            // Animatsiya tezligi va davomiyligini tasodifiy qilish
-            streak.style.animationDuration = (Math.random() * 1 + 0.5) + 's'; 
-            streak.style.animationDelay = Math.random() * 2 + 's';
-            document.body.appendChild(streak);
+        function createRainDrop() {
+            const drop = document.createElement('div');
+            drop.classList.add('rain-drop');
+            drop.style.left = Math.random() * 100 + 'vw';
             
-            setTimeout(() => { streak.remove(); }, 3000);
+            // Randomize size and speed for realism
+            const sizeMultiplier = Math.random() * 1.5 + 0.5;
+            drop.style.transform = `scale(${sizeMultiplier})`;
+            
+            drop.style.animationDuration = (Math.random() * 2 + 1) + 's'; 
+            
+            // Random delay so they don't all fall at once
+            drop.style.animationDelay = Math.random() * 0.5 + 's';
+            
+            document.body.appendChild(drop);
+            
+            // Remove after animation completes
+            setTimeout(() => { drop.remove(); }, 3500);
         }
 
-        // Sahifa yuklanganda avtomatik ravishda qon izlari paydo bo'lishi uchun
-        setInterval(createRainStreak, 200);
+        // Start rain effect immediately
+        setInterval(createRainDrop, 150);
 
+        // More drops when typing
         inputs.forEach(input => {
             input.addEventListener('input', () => {
-                // Input kiritilganda ko'proq iz paydo bo'lishi uchun
-                for(let i=0; i<5; i++) {
-                    createRainStreak();
+                for(let i=0; i<3; i++) {
+                    createRainDrop();
                 }
             });
         });
 
         startBtn.addEventListener('click', () => {
+            // Load background music (Silent Hill inspired or similar creepy track)
             audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/MPa-y1LQjOk?autoplay=1&loop=1&playlist=MPa-y1LQjOk" frameborder="0" allow="autoplay"></iframe>`;
             startBtn.style.display = 'none';
             modal.style.display = 'flex';
         });
 
-        const locations = [
-            "hojatxonada", "kimsasiz parkda", "qorong'i yo'lda", "tashlandiq eski binoda", 
-            "keng daryo bo'yida", "o'z uyingizning yerto'lasida", "ishxonadagi lift ichida", 
-            "shifoxonaning sovuq palatasida", "mashina o'rindig'ida", "poezd vagonida", 
-            "samolyot hojatxonasida", "kimsasiz orolda", "yerto'la zinapoyasida", 
-            "qalin o'rmon o'rtasida", "yerosti o'tish yo'lida", "cho'l o'rtasida", 
-            "muzlagan ko'l ustida", "baland qoyalar ustida", "omborxonada", "zinapoyada",
-            "avtomobil turargohida", "eski qabristonda", "ko'prik ostida"
-        ];
-
-        const causes = [
-            "mashina urib ketib", "kutilmaganda yonib ketib", "suvga cho'kib ketib", 
-            "balandlikdan yiqilib", "yurak xurujidan", "zaharli ilon chaqib", 
-            "qotilning sovuq qurolidan", "tasodifiy o'q tegib", "kuchli tok urib", 
-            "muzlab qolib", "ochlik va suvsizlikdan", "nafas qisib", 
-            "yovvoyi hayvonlar hujum qilib", "kuchli portlash qurboni bo'lib", 
-            "zaharli gazdan bo'g'ilib", "boshga og'ir jism tushib", "qorong'ida qoqinib ketib",
-            "o'z qo'lingiz bilan", "avtohalokat tufayli majag'lanib", "sirli kasallikka chalinib",
-            "chilla vaqtida oftob urib", "yashindek tez kelgan o'lim farishtasidan"
-        ];
-
-        function getRandomElement(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
-        }
-
         function calculateDeathDate(currentAge) {
-            const baseDate = new Date(2026, 7, 1); // 1-Avgust 2026
-            let yearsLeft = 85 - currentAge;
-            if (yearsLeft < 1) yearsLeft = 2; // Agar yoshi juda katta bo'lsa
+            const baseDate = new Date(2026, 7, 1); // August 1, 2026
             
+            // Realistic lifespan assumption (max ~100-110, average 70-80)
+            let maxLifespan = 85; 
+            if (currentAge >= 80) maxLifespan = currentAge + 5; // Give them a few more years if they are already old
+            
+            let yearsLeft = maxLifespan - currentAge;
+            if (yearsLeft < 1) yearsLeft = 1; 
+
+            // Add some randomness - some die young, some live long
+            // 20% chance of dying much earlier
+            if (Math.random() < 0.2 && yearsLeft > 10) {
+                yearsLeft = Math.floor(Math.random() * 10) + 1;
+            }
+
             const randomDaysLeft = Math.floor(Math.random() * (yearsLeft * 365));
             const deathDate = new Date(baseDate.getTime() + (randomDaysLeft * 24 * 60 * 60 * 1000));
             
@@ -324,17 +364,87 @@
             return { formattedDate: `${dd}.${mm}.${yyyy}`, deathAge: deathAge };
         }
 
-        function getDeathScenario() {
-            return {
-                location: getRandomElement(locations),
-                cause: getRandomElement(causes)
+        function triggerJumpscare() {
+            // Hide modal, show red overlay
+            modal.style.display = 'none';
+            jumpscareOverlay.style.display = 'flex';
+            
+            // Stop youtube music (remove iframe)
+            audioContainer.innerHTML = '';
+            
+            // Create audio context for the scream
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Synthesize a terrible noise (since we can't easily load external assets)
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                // Harsh, dissonant frequencies
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 1);
+                
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 1);
+                
+                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+                
+                osc1.connect(gainNode);
+                osc2.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 2);
+                osc2.stop(audioCtx.currentTime + 2);
+                
+            } catch (e) {
+                console.log("Audio API not supported");
+            }
+        }
+
+        async function fetchStoryFromGemini(name, dateData) {
+            const prompt = `Sen sirli va dahshatli taqdirni aytib beruvchi tilsan.
+            Mijozning ismi: ${name}. 
+            Uning o'lim yoshi: ${dateData.deathAge}.
+            Vazifa: Bu odam aynan shu yoshida qanday qilib va qayerda fojiali tarzda o'lishi haqida o'zbek tilida 2-3 gapdan iborat qisqa, mikstik va juda qo'rqinchli hikoya yozib ber. 
+            Hikoya uning ismini aytib, bevosita unga murojaat qilish bilan boshlanishi kerak (Masalan: "Asadbek, sen...").
+            Hech qanday salomlashish, tushuntirish yoki ortiqcha so'zlar bo'lmasin. Faqat hikoyani o'zini qaytar.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: {
+                    parts: [{ text: "Siz qisqa, qo'rqinchli va sirli hikoyalar yozuvchisisiz. Faqat so'ralgan ma'lumotni o'zbek tilida qaytarasiz." }]
+                }
             };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Invalid response from Gemini");
+                }
+            } catch (error) {
+                console.error("Gemini API xatosi:", error);
+                return `${name}, seni qorong'i o'rmon qa'rida, ismingni chaqirayotgan noma'lum sharpalar qurshovida topishadi. Nafasing uzilayotganda faqat sovuq shamol ovozini eshitasan.`;
+            }
         }
 
         generateBtn.addEventListener('click', async () => {
-            if (attempts >= 3) {
-                resultDiv.innerHTML = "<span style='color:#00ff7f; font-size:26px;'>Bo'ldi endi, o'zingni aldama!</span>";
-                generateBtn.style.display = 'none';
+            // Check if attempt limit reached
+            if (attempts >= MAX_ATTEMPTS) {
+                triggerJumpscare();
                 return;
             }
 
@@ -342,7 +452,7 @@
             const ageInput = document.getElementById('userAge').value;
             
             if (!name || !ageInput) {
-                resultDiv.innerHTML = "<span style='color:#00ff7f;'>Ism va yoshingizni kiritishingiz shart...</span>";
+                resultDiv.innerHTML = "<span style='color:#ff0000;'>Ism va yoshingizni kiritishingiz shart...</span>";
                 return;
             }
 
@@ -350,32 +460,38 @@
             
             generateBtn.disabled = true;
             generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
-            resultDiv.innerHTML = "";
+            resultDiv.innerHTML = "<div class='loading-text'>Taqdir kitobi varaqlanmoqda...</div>";
 
             try {
-                // Ruhlar bilan bog'lanish effektini berish uchun vaqtinchalik kutish
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
                 const dateData = calculateDeathDate(currentAge);
-                const scenario = getDeathScenario();
+                
+                // Call Gemini API to generate the story
+                const story = await fetchStoryFromGemini(name, dateData);
 
-                // Natijani ekranga ko'rsatish
+                // Format the output
                 resultDiv.innerHTML = `
-                    <span class="name-highlight">${name}</span>... <br><br> 
-                    Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span>, <br> 
-                    <b>${scenario.location}</b>, <br> 
-                    <b>${scenario.cause}</b> o'lasan.
+                    <span class="name-highlight">${name}</span>
+                    <div>Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span> olamdan o'tasiz.</div>
+                    <br>
+                    <div><i>"${story}"</i></div>
                     <span class="god-knows">... yana Xudo biladi.</span>
                 `;
                 
                 attempts++;
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.textContent = "O'lim generatori";
                 
-                if (attempts >= 3) {
-                    generateBtn.disabled = true;
-                    generateBtn.textContent = "Yakunlandi";
+                if (attempts === MAX_ATTEMPTS) {
+                    generateBtn.textContent = "So'nggi haqiqat";
+                    generateBtn.style.backgroundColor = "#800000"; // Turn button red for the last try
+                    generateBtn.style.color = "#fff";
+                }
+            } catch (error) {
+                 resultDiv.innerHTML = "<span style='color:#ff0000;'>Zulmat bilan aloqa uzildi. Qaytadan urinib ko'ring.</span>";
+            } finally {
+                if (attempts < MAX_ATTEMPTS) {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = "O'lim generatori";
+                } else {
+                     generateBtn.disabled = false;
                 }
             }
         });
