@@ -28,7 +28,6 @@
             align-items: center;
             overflow: hidden;
             position: relative;
-            /* We'll change this to red in JS for the jumpscare */
             transition: background-color 0.1s; 
         }
 
@@ -37,7 +36,6 @@
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
-            /* Makes it look like we are looking through a wet, dirty window */
             box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
         }
 
@@ -71,7 +69,6 @@
         @keyframes rainFall {
             0% { top: -20px; opacity: 0; height: 10px;}
             10% { opacity: 0.8; height: 30px;}
-            /* Simulate sliding down a window, leaving a trail */
             80% { opacity: 0.6; height: 80px;}
             100% { top: 110vh; opacity: 0; height: 150px; }
         }
@@ -80,12 +77,23 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #ff0000;
+            background-color: #8b0000;
+            /* Qon sachrashiga o'xshash CSS gradientlar */
+            background-image: 
+                radial-gradient(circle at 50% 50%, #ff0000 0%, transparent 60%),
+                radial-gradient(circle at 20% 30%, #cc0000 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #990000 0%, transparent 50%),
+                radial-gradient(circle at 30% 80%, #aa0000 0%, transparent 45%);
             z-index: 9999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            animation: shake 0.5s infinite;
+            animation: bloodSplash 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, shake 0.5s infinite;
+        }
+
+        @keyframes bloodSplash {
+            0% { transform: scale(0.1); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         #jumpscare-overlay h1 {
@@ -137,7 +145,7 @@
         #generator-modal {
             display: none;
             flex-direction: column;
-            background: rgba(0, 15, 0, 0.95); /* Darker green background */
+            background: rgba(0, 15, 0, 0.95); 
             border: 1px solid #004d00;
             padding: 40px;
             border-radius: 15px;
@@ -189,7 +197,7 @@
             padding: 15px;
             font-size: 22px;
             font-family: 'Creepster', cursive;
-            color: #000; /* Better contrast */
+            color: #000; 
             background: #008000;
             border: none;
             cursor: pointer;
@@ -295,33 +303,29 @@
         let attempts = 0; 
         const MAX_ATTEMPTS = 3;
         
-        const apiKey = ""; // API key will be injected by Canvas
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        const apiKey = ""; 
+        // Generativelanguage API endpoint updated for Canvas environment
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
         function createRainDrop() {
             const drop = document.createElement('div');
             drop.classList.add('rain-drop');
             drop.style.left = Math.random() * 100 + 'vw';
             
-            // Randomize size and speed for realism
             const sizeMultiplier = Math.random() * 1.5 + 0.5;
             drop.style.transform = `scale(${sizeMultiplier})`;
             
             drop.style.animationDuration = (Math.random() * 2 + 1) + 's'; 
             
-            // Random delay so they don't all fall at once
             drop.style.animationDelay = Math.random() * 0.5 + 's';
             
             document.body.appendChild(drop);
             
-            // Remove after animation completes
             setTimeout(() => { drop.remove(); }, 3500);
         }
 
-        // Start rain effect immediately
         setInterval(createRainDrop, 150);
 
-        // More drops when typing
         inputs.forEach(input => {
             input.addEventListener('input', () => {
                 for(let i=0; i<3; i++) {
@@ -331,24 +335,20 @@
         });
 
         startBtn.addEventListener('click', () => {
-            // Load background music (Silent Hill inspired or similar creepy track)
             audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/MPa-y1LQjOk?autoplay=1&loop=1&playlist=MPa-y1LQjOk" frameborder="0" allow="autoplay"></iframe>`;
             startBtn.style.display = 'none';
             modal.style.display = 'flex';
         });
 
         function calculateDeathDate(currentAge) {
-            const baseDate = new Date(2026, 7, 1); // August 1, 2026
+            const baseDate = new Date(2026, 7, 1);
             
-            // Realistic lifespan assumption (max ~100-110, average 70-80)
             let maxLifespan = 85; 
-            if (currentAge >= 80) maxLifespan = currentAge + 5; // Give them a few more years if they are already old
+            if (currentAge >= 80) maxLifespan = currentAge + 5;
             
             let yearsLeft = maxLifespan - currentAge;
             if (yearsLeft < 1) yearsLeft = 1; 
 
-            // Add some randomness - some die young, some live long
-            // 20% chance of dying much earlier
             if (Math.random() < 0.2 && yearsLeft > 10) {
                 yearsLeft = Math.floor(Math.random() * 10) + 1;
             }
@@ -365,46 +365,11 @@
         }
 
         function triggerJumpscare() {
-            // Hide modal, show red overlay
             modal.style.display = 'none';
             jumpscareOverlay.style.display = 'flex';
             
-            // Stop youtube music (remove iframe)
-            audioContainer.innerHTML = '';
-            
-            // Create audio context for the scream
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Synthesize a terrible noise (since we can't easily load external assets)
-                const osc1 = audioCtx.createOscillator();
-                const osc2 = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                // Harsh, dissonant frequencies
-                osc1.type = 'sawtooth';
-                osc1.frequency.setValueAtTime(1000, audioCtx.currentTime);
-                osc1.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 1);
-                
-                osc2.type = 'square';
-                osc2.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc2.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 1);
-                
-                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-                
-                osc1.connect(gainNode);
-                osc2.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                osc1.start();
-                osc2.start();
-                osc1.stop(audioCtx.currentTime + 2);
-                osc2.stop(audioCtx.currentTime + 2);
-                
-            } catch (e) {
-                console.log("Audio API not supported");
-            }
+            // Jumpscare audiosini qo'shamiz va avtomatik chalamiz
+            audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/4JvJd6BkBJ4?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
         }
 
         async function fetchStoryFromGemini(name, dateData) {
@@ -442,7 +407,6 @@
         }
 
         generateBtn.addEventListener('click', async () => {
-            // Check if attempt limit reached
             if (attempts >= MAX_ATTEMPTS) {
                 triggerJumpscare();
                 return;
@@ -465,10 +429,8 @@
             try {
                 const dateData = calculateDeathDate(currentAge);
                 
-                // Call Gemini API to generate the story
                 const story = await fetchStoryFromGemini(name, dateData);
 
-                // Format the output
                 resultDiv.innerHTML = `
                     <span class="name-highlight">${name}</span>
                     <div>Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span> olamdan o'tasiz.</div>
@@ -481,7 +443,7 @@
                 
                 if (attempts === MAX_ATTEMPTS) {
                     generateBtn.textContent = "So'nggi haqiqat";
-                    generateBtn.style.backgroundColor = "#800000"; // Turn button red for the last try
+                    generateBtn.style.backgroundColor = "#800000"; 
                     generateBtn.style.color = "#fff";
                 }
             } catch (error) {
