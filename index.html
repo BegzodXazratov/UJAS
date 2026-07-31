@@ -360,50 +360,58 @@
 
         const storyParts = {
             locations: [
-                "kimsasiz va qorong'i qabristonda", "eski, zax va tashlandiq shifoxonada", 
-                "uzoq yillik qorong'i yerto'la qa'rida", "qalin va sovuq o'rmon o'rtasida", 
-                "jimjit va izg'irinli daryo bo'yida", "tungi soat uchda o'z yotog'ingda", 
-                "zanglagan eski lift ichida qamalib", "qon hidi anqib turgan omborxonada",
-                "yomg'irli kunda kimsasiz bekatingizda", "buzilib yotgan cherkov xarobalarida",
-                "oy nuri umuman tushmaydigan tor ko'chada", "oynalari siniq eski qasrda",
-                "kimsasiz cho'l o'rtasida", "qop-qorong'i metro tunneli ostida",
-                "hech kim yashamaydigan huvillagan qishloqda", "chirigan yog'och uyning chardog'ida",
-                "ko'zgular bilan qoplangan telbalar xonasida", "qonli vannada", 
-                "jarlik yoqasida", "zaharli gazlarga to'la zavod ichida"
+                "o'z uyingdagi issiq o'rningda", "serqatnov ko'cha chorrahasida", 
+                "ishxonangdagi kompyuter qarshisida", "katta trassada mashina rulida", 
+                "tungi kimsasiz yo'lda", "oshxonada ovqat tayyorlayotganingda", 
+                "issiq hammomda cho'milayotganingda", "metro bekatida poyezd kutayotib", 
+                "shahar markazidagi xiyobonda", "havoga ko'tarilgan samolyot salonida", 
+                "uzoq safarga chiqqan poyezd vagonida", "kasalxonaning sovuq palatasida", 
+                "baland qoyalar ustida sayr qilib yurganda", "chuqur suv havzasida suzayotganda", 
+                "avtomobil turargohida mashinangni kutib", "qurilishi tugallanmagan bino oldida",
+                "do'konda navbatda turganingda", "eski va chirigan ko'prik ustida",
+                "qishning qahraton sovuq ko'chasida", "qorong'i va yoritilmagan tor ko'chada",
+                "uyingning balkonida havo olayotib", "piyodalar o'tish yo'lagida",
+                "toqqa chiqish vaqtida tepalikda", "restoranda xotirjam ovqatlanib o'tirganingda",
+                "gaz quyish shoxobchasida"
             ],
             events: [
-                "noma'lum qora sharpa ortingdan kelib tomog'ingdan bo'g'adi",
-                "ko'zgudan uzatilgan chirigan qo'llar seni o'ziga tortib ketadi",
-                "devordan sizib chiqqan qonli sharpalar seni o'rab oladi",
-                "yer to'satdan yorilib, tubsiz zulmat olovi seni yutib yuboradi",
-                "o'zingning soyang tirilib, senga hujum qiladi va tanangni parchalaydi",
-                "ko'zlari qonga to'lgan yuzsiz mavjudot tiriklayin yuragingni sug'urib oladi",
-                "minglab qora o'rgimchaklar tanangni yorib kirib, ichingni kemirib bitiradi",
-                "deraza ortidan qarab turgan jinlar aql-hushingni olib, o'z joniga qasd qilishga majburlaydi",
-                "osmondan tushgan olovli meteorit vujudingni kulga aylantiradi",
-                "eski la'nat uyg'onib, bir soniyada butun qoningni muzlatib qo'yadi",
-                "yer ostidan chiqqan murdalar oyoqlaringdan tortib, o'zlari bilan go'rga tiqadi",
-                "noma'lum qora virus bir necha daqiqada suyaklaringni eritib yuboradi",
-                "ko'zga ko'rinmas shafqatsiz pichoqlar butun tanangni tilkalab tashlaydi",
-                "sovuq tuman ichidan chiqqan maxluq seni burda-burda qilib yeydi",
-                "do'zax itlari iskaragi seni quvib yetib tomog'ingni g'ajib tashlaydi",
-                "o'z yaqining qiyofasiga kirgan shayton seni sovuqqonlik bilan so'yib tashlaydi",
-                "shiftda yashiringan ko'rshapalak-odam tepangdan sakrab boshingni uzib oladi",
-                "bo'yningga sirtmoq tashlagan ko'rinmas kuch seni osib qo'yadi",
-                "vujuding o'z-o'zidan yonishni boshlaydi va tiriklayin jizzig'ing chiqadi",
-                "ongingni egallab olgan iblis seni eng baland binodan sakrashga undaydi"
+                "katta tezlikda kelayotgan tormozi buzuq yuk mashinasi seni majag'lab ketadi",
+                "yeyayotgan ovqating tomog'ingga tiqilib, nafas ololmay qolasan",
+                "kuchli qisqa tutashuv oqibatida minglab voltli tok urib, yuraging to'xtaydi",
+                "is gazidan zaharlanib, butunlay xushsiz holatda narigi dunyoga ravona bo'lasan",
+                "balandlikdan muvozanatni yo'qotib, boshing bilan beton ustiga qulab tushasan",
+                "ko'chada ketayotganingda tepadan juda og'ir temir bo'lagi to'g'ri ustingga tushadi",
+                "to'satdan kuchli yurak xuruji (infarkt) tutib, yordam so'rashga ulgurolmaysan",
+                "qattiq zaharlanish oqibatida ichki a'zolaring bir necha daqiqada ishdan chiqadi",
+                "kutilmagan va dahshatli yong'in ichida qamalib, tutundan bo'g'ilib qolasan",
+                "avtohalokat tufayli mashina ichida pachoqlanib ketasan",
+                "oyog'ing tortishib qolib, suv ostiga cho'kib g'arq bo'lasan",
+                "kuchli allergik reaksiya (anafilaktik shok) berib, nafas yo'llaring yopilib qoladi",
+                "gaz baloni portlashi natijasida tanang tanib bo'lmas darajada kuyib ketadi",
+                "muzlagan va sirpanchiq yo'lda yiqilib, o'tkir burchakka urilasan",
+                "yer silkinishi oqibatida qulagan devor plitalari ostida qolib ketasan",
+                "baxtsiz tasodif tufayli qoninga zaharli infeksiya tushib, butun tanang shishib ketadi",
+                "qattiq shamol uchirgan shisha siniqlari tomog'ingni kesib o'tadi",
+                "adashib yuqori dozali dori ichib qo'yib, miyang faoliyatini to'xtatadi",
+                "zaharli ilon yoki chayon chaqishi oqibatida qoning qotib qoladi",
+                "kuchli qon bosimi oshishi (insult) tufayli miyanga qon quyilib yiqilasan",
+                "o'rmonda yovvoyi itlar yoki bo'rilar galasiga duch kelib, g'ajib tashlanasan",
+                "samolyot dvigateli ishdan chiqib, minglab metr balandlikdan pastga qulaysan",
+                "poyezd relsdan chiqib ketib, vagonning og'ir temirlari ostida ezilasan",
+                "boshqaruvni yo'qotgan mast haydovchi seni to'g'ridan-to'g'ri urib uchirib yuboradi",
+                "qorong'ida yashiringan qotilning pichog'iga tasodifiy o'lja bo'lib qolasan"
             ],
             conclusions: [
-                "Nafasing uzilayotganda faqatgina o'z xirillashingni eshitasan.",
-                "Sening dod-faryodingni hech kim, hech qachon eshitmaydi.",
-                "Ko'zlaring dahshatdan ochiq qotib qoladi.",
-                "Jonsiz va parchalangan tanang hech qachon topilmaydi.",
-                "Ruhing o'sha zax joyda abadiy azob chekib sargardon qoladi.",
-                "Oxirgi ko'rgan narsang o'zingning qonga belangan qo'llaring bo'ladi.",
-                "Bu azob hatto o'limingdan keyin ham asrlar davom etadi.",
-                "Seni eslaganlar faqatgina qora tushlarida ko'rib, dahshatga tushishadi.",
-                "O'lim farishtasi joningni eng shafqatsiz usulda sug'urib oladi.",
-                "Qoning yerga singib, o'sha joy abadiy la'natlangan maskanga aylanadi."
+                "Hamma narsa bir soniyada sodir bo'ladi va ko'zlaring mangu yumiladi.",
+                "So'nggi nafasingni olayotganda atrofingdagi odamlar senga yordam bera olmaydi.",
+                "O'sha lahzada faqat qattiq og'riq va cheksiz zulmatni his qilasan.",
+                "Tez yordam yetib kelguncha tanang allaqachon muzlab ulgurgan bo'ladi.",
+                "Yuzingda o'lim dahshati mangu qotib qoladi.",
+                "Hech kim sening so'nggi dod-faryodingni eshitmaydi.",
+                "Bu oddiygina tasodif sening umringga kutilmaganda fojiali nuqta qo'yadi.",
+                "O'liming shunchalik kutilmagan bo'ladiki, yaqinlaring shokka tushib qoladi.",
+                "Bu fojiadan so'ng tanangni tanib olishning imkoni bo'lmaydi.",
+                "Sening bu dunyodagi vaqting aynan shu sovuq joyda yakun topadi."
             ]
         };
 
@@ -435,7 +443,7 @@
             generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
             resultDiv.innerHTML = "<div class='loading-text'>Taqdir kitobi varaqlanmoqda...</div>";
 
-            // Simulyatsiya qilingan kechikish (Go'yoki AI o'ylayotgandek)
+            // Simulyatsiya qilingan kechikish
             setTimeout(() => {
                 const dateData = calculateDeathDate(currentAge);
                 const story = generateUniqueStory(name);
@@ -450,7 +458,10 @@
                 
                 attempts++;
                 
+                // BU YERDA XATO TUZATILDI: 
+                // Oldin "generateBtn.disabled = false" yozilmagani uchun tugma bosib bo'lmaydigan bo'lib qolayotgandi!
                 if (attempts === MAX_ATTEMPTS) {
+                    generateBtn.disabled = false; 
                     generateBtn.textContent = "So'nggi haqiqat";
                     generateBtn.style.backgroundColor = "#800000"; 
                     generateBtn.style.color = "#fff";
