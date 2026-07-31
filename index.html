@@ -14,9 +14,15 @@
         }
 
         body {
-            background-color: #030000;
-            background-image: radial-gradient(circle at center, #1a0000 0%, #000000 80%);
-            color: #ff3333;
+            background-color: #000000;
+            /* Fon rasmi qizil o'rniga yashil-qora o'rmon rasmi bilan almashtirildi */
+            background-image: 
+                linear-gradient(to bottom, rgba(0,20,0,0.8), rgba(0,0,0,1)),
+                url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            /* Asosiy matn rangi yashil qilindi */
+            color: #00ff7f;
             font-family: 'Roboto', sans-serif;
             height: 100vh;
             display: flex;
@@ -26,14 +32,14 @@
             position: relative;
         }
 
-        .blood-overlay {
+        /* Eski blood-overlay olib tashlandi, o'rniga rain-overlay qo'shildi */
+        .rain-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1505635552518-3448ff116af3?q=80&w=2000&auto=format&fit=crop') center/cover;
-            opacity: 0.2;
-            mix-blend-mode: multiply;
             pointer-events: none;
             z-index: 1;
+            /* Oynadagi yomg'ir effekti uchun filtr */
+            backdrop-filter: blur(2px);
         }
 
         .glitch-effect {
@@ -41,8 +47,8 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(0, 0, 0, 0.2),
-                rgba(0, 0, 0, 0.2) 2px,
+                rgba(0, 20, 0, 0.1),
+                rgba(0, 20, 0, 0.1) 2px,
                 transparent 2px,
                 transparent 4px
             );
@@ -50,100 +56,61 @@
             z-index: 2;
         }
 
-        /* Haqiqiy qon tomchisi (Dumli) */
-        .blood-drip {
-            position: fixed;
-            top: -100px;
-            width: 14px;
-            height: 24px;
-            background: #8a0303;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            box-shadow: inset -3px -3px 5px rgba(0,0,0,0.6), 0 0 10px #ff0000;
-            z-index: 9999; /* Formaning ustidan oqishi uchun */
-            pointer-events: none;
-            animation: dripFall linear forwards;
-        }
-
-        .blood-drip::before {
-            content: '';
+        /* Yangi qon (yomg'ir izi) animatsiyasi */
+        .rain-streak {
             position: absolute;
-            bottom: 12px;
-            left: 3px;
-            width: 8px;
-            height: 80px;
-            background: linear-gradient(to top, #8a0303, transparent);
-            z-index: -1;
-        }
-
-        @keyframes dripFall {
-            0% { top: -100px; opacity: 1; }
-            80% { opacity: 1; }
-            100% { top: 110vh; opacity: 0; }
-        }
-
-        /* Bosh suyagi animatsiyalari */
-        .skull-container {
-            position: fixed;
-            bottom: -300px;
-            left: 5%;
-            width: 180px;
-            z-index: 10000;
+            top: -100px;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(255,0,0,0), rgba(200,0,0,0.8), rgba(139,0,0,1));
+            border-radius: 50%;
+            /* Soyalar yashil rangga moslandi */
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+            animation: streakFall linear forwards;
+            z-index: 5;
             pointer-events: none;
-            animation: peekSkull 12s infinite;
-            filter: drop-shadow(0 0 20px #ff0000);
+            opacity: 0;
         }
 
-        .skull-container.right {
-            left: auto;
-            right: -300px;
-            bottom: 30%;
-            animation: peekSkullRight 16s infinite 5s; /* Kechikib chiqadi */
-        }
-
-        @keyframes peekSkull {
-            0%, 80%, 100% { bottom: -300px; transform: rotate(-20deg); }
-            85% { bottom: -20px; transform: rotate(10deg); }
-            95% { bottom: -20px; transform: rotate(5deg); }
-        }
-
-        @keyframes peekSkullRight {
-            0%, 85%, 100% { right: -300px; transform: rotate(-90deg); }
-            90% { right: -20px; transform: rotate(-20deg); }
-            95% { right: -20px; transform: rotate(-25deg); }
+        @keyframes streakFall {
+            0% { top: -50px; height: 20px; opacity: 0.1; }
+            20% { opacity: 0.8; }
+            100% { top: 110vh; height: 150px; opacity: 0; }
         }
 
         #start-btn {
             padding: 20px 50px;
             font-size: 26px;
             font-family: 'Nosifer', cursive;
-            color: #8b0000;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #8b0000;
+            /* Tugma ranglari yashil rangga o'zgartirildi */
+            color: #006400;
+            background: rgba(0, 20, 0, 0.6);
+            border: 2px solid #006400;
             cursor: pointer;
             z-index: 10;
             transition: all 0.3s;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
+            text-shadow: 0 0 15px rgba(0, 255, 127, 0.5);
+            box-shadow: 0 0 30px rgba(0, 100, 0, 0.3);
             border-radius: 10px;
         }
 
         #start-btn:hover {
-            color: #ff0000;
-            border-color: #ff0000;
-            background: rgba(50, 0, 0, 0.8);
-            box-shadow: 0 0 50px rgba(255, 0, 0, 1), inset 0 0 20px rgba(255, 0, 0, 0.5);
+            color: #00ff7f;
+            border-color: #00ff7f;
+            background: rgba(0, 50, 0, 0.8);
+            box-shadow: 0 0 50px rgba(0, 255, 127, 0.8), inset 0 0 20px rgba(0, 255, 127, 0.3);
             transform: scale(1.1);
         }
 
         #generator-modal {
             display: none;
             flex-direction: column;
-            background: rgba(5, 0, 0, 0.95);
-            border: 1px solid #5a0000;
+            /* Modal foni va chegarasi yashil rangga moslandi */
+            background: rgba(0, 10, 0, 0.95);
+            border: 1px solid #004d00;
             padding: 40px;
             border-radius: 15px;
             z-index: 10;
-            box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 60px rgba(0, 255, 127, 0.2);
             width: 90%;
             max-width: 550px;
             text-align: center;
@@ -159,9 +126,10 @@
         h1 {
             font-family: 'Creepster', cursive;
             font-size: 40px;
-            color: #ff1a1a;
+            /* Sarlavha rangi va soyasi yashil qilindi */
+            color: #00ff7f;
             margin-bottom: 30px;
-            text-shadow: 3px 3px 10px #000, 0 0 20px #8a0303;
+            text-shadow: 3px 3px 10px #000, 0 0 20px #006400;
             letter-spacing: 2px;
         }
 
@@ -169,9 +137,10 @@
             width: 100%;
             padding: 15px;
             margin-bottom: 25px;
-            background: #0a0a0a;
-            border: 1px solid #4d0000;
-            color: #ff4d4d;
+            /* Input maydoni ranglari yashil qilindi */
+            background: #0a140a;
+            border: 1px solid #003300;
+            color: #00ff7f;
             font-size: 18px;
             outline: none;
             transition: 0.3s;
@@ -180,9 +149,9 @@
         }
 
         input:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-            background: #110000;
+            border-color: #00ff7f;
+            box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
+            background: #0f1f0f;
         }
 
         #generate-btn {
@@ -191,7 +160,8 @@
             font-size: 22px;
             font-family: 'Creepster', cursive;
             color: #fff;
-            background: #800000;
+            /* Generatsiya tugmasi rangi yashil qilindi */
+            background: #006400;
             border: none;
             cursor: pointer;
             transition: 0.3s;
@@ -201,8 +171,8 @@
         }
 
         #generate-btn:hover:not(:disabled) {
-            background: #b30000;
-            box-shadow: 0 0 30px #ff0000;
+            background: #008000;
+            box-shadow: 0 0 30px #00ff7f;
             transform: scale(1.02);
         }
 
@@ -219,19 +189,22 @@
             font-size: 22px;
             line-height: 1.6;
             color: #e6e6e6;
-            text-shadow: 0 0 10px #ff0000;
+            /* Natija matni soyasi yashil qilindi */
+            text-shadow: 0 0 10px #00ff7f;
             min-height: 80px;
         }
         
         .highlight {
-            color: #ff0000;
+            /* Ta'kidlash ranglari yashil qilindi */
+            color: #00ff7f;
             font-weight: bold;
             font-size: 26px;
-            text-shadow: 0 0 15px #ff0000;
+            text-shadow: 0 0 15px #00ff7f;
         }
 
         .name-highlight {
-            color: #ff0000;
+            /* Ism ta'kidlash rangi yashil qilindi */
+            color: #00ff7f;
             font-family: 'Creepster', cursive;
             font-size: 32px;
             letter-spacing: 1px;
@@ -249,35 +222,9 @@
 </head>
 <body>
 
-    <div class="blood-overlay"></div>
+    <!-- Eski blood-overlay o'rniga rain-overlay ishlatildi -->
+    <div class="rain-overlay"></div>
     <div class="glitch-effect"></div>
-
-    <!-- Bosh suyaklari (Skulls) -->
-    <div class="skull-container">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <!-- Suyak shakli -->
-            <path fill="#110000" stroke="#5a0000" stroke-width="10" d="M256 32C150.3 32 64 118.3 64 224c0 62.4 29.8 117.7 75.6 152.1.2 55.7 39.8 63.9 116.4 63.9 77.2 0 115.4-8.8 116.4-63.9C418.2 341.7 448 286.4 448 224 448 118.3 361.7 32 256 32zm-64 256c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm128 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-            <!-- Ko'zlari (qizil miltillaydigan) -->
-            <circle cx="192" cy="240" r="15" fill="#ff0000">
-                <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="320" cy="240" r="15" fill="#ff0000">
-                <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/>
-            </circle>
-            <!-- Burun teshigi va tishlar -->
-            <path fill="#3a0000" d="M256 320c-17.7 0-32-14.3-32-32h64c0 17.7-14.3 32-32 32z"/>
-            <path stroke="#3a0000" stroke-width="8" stroke-linecap="round" d="M190 400 L210 370 M256 405 L256 375 M322 400 L302 370"/>
-        </svg>
-    </div>
-    
-    <div class="skull-container right">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#0a0000" stroke="#8a0000" stroke-width="12" d="M256 32C150.3 32 64 118.3 64 224c0 62.4 29.8 117.7 75.6 152.1.2 55.7 39.8 63.9 116.4 63.9 77.2 0 115.4-8.8 116.4-63.9C418.2 341.7 448 286.4 448 224 448 118.3 361.7 32 256 32zm-64 256c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm128 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-            <circle cx="192" cy="240" r="18" fill="#ff0000"/>
-            <circle cx="320" cy="240" r="18" fill="#ff0000"/>
-            <path fill="#4a0000" d="M256 320c-17.7 0-32-14.3-32-32h64c0 17.7-14.3 32-32 32z"/>
-        </svg>
-    </div>
 
     <div id="audio-container" style="display:none;"></div>
 
@@ -305,26 +252,27 @@
         // Gemini API kaliti Canvas tomonidan taqdim etiladi
         const apiKey = "";
 
-        function createBloodDrop() {
-            const drop = document.createElement('div');
-            drop.classList.add('blood-drip'); // Yangilangan sinf
-            drop.style.left = Math.random() * 95 + 'vw';
-            drop.style.animationDuration = Math.random() * 1.5 + 2.5 + 's'; 
+        // Yangi qon (yomg'ir izi) yaratish funksiyasi
+        function createRainStreak() {
+            const streak = document.createElement('div');
+            streak.classList.add('rain-streak');
+            streak.style.left = Math.random() * 100 + 'vw';
+            // Animatsiya tezligi va davomiyligini tasodifiy qilish
+            streak.style.animationDuration = (Math.random() * 1 + 0.5) + 's'; 
+            streak.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(streak);
             
-            // Har bir qon tomchisining hajmini biroz o'zgartirish
-            const scale = Math.random() * 0.5 + 0.6;
-            drop.style.transform = `scale(${scale})`;
-
-            document.body.appendChild(drop);
-            
-            setTimeout(() => { drop.remove(); }, 4000);
+            setTimeout(() => { streak.remove(); }, 3000);
         }
+
+        // Sahifa yuklanganda avtomatik ravishda qon izlari paydo bo'lishi uchun
+        setInterval(createRainStreak, 200);
 
         inputs.forEach(input => {
             input.addEventListener('input', () => {
-                let drops = Math.floor(Math.random() * 3) + 1;
-                for(let i=0; i<drops; i++) {
-                    createBloodDrop();
+                // Input kiritilganda ko'proq iz paydo bo'lishi uchun
+                for(let i=0; i<5; i++) {
+                    createRainStreak();
                 }
             });
         });
@@ -335,86 +283,58 @@
             modal.style.display = 'flex';
         });
 
-        function calculateDeathDate(currentAge) {
-            let yearsLeft = 0;
-            
-            if (currentAge >= 100) {
-                yearsLeft = Math.floor(Math.random() * 2) + 1;
-            } else {
-                let randomChance = Math.random();
-                if (randomChance < 0.65 && currentAge < 80) {
-                    let minDeathAge = Math.max(currentAge + 1, 65);
-                    let maxDeathAge = 85;
-                    yearsLeft = Math.floor(Math.random() * (maxDeathAge - minDeathAge + 1)) + (minDeathAge - currentAge);
-                } else if (randomChance < 0.90 && currentAge < 60) {
-                    yearsLeft = Math.floor(Math.random() * (65 - currentAge + 1)) + 1;
-                } else {
-                    let minDeathAge = Math.max(currentAge + 1, 85);
-                    yearsLeft = Math.floor(Math.random() * (105 - minDeathAge + 1)) + (minDeathAge - currentAge);
-                }
-            }
+        const locations = [
+            "hojatxonada", "kimsasiz parkda", "qorong'i yo'lda", "tashlandiq eski binoda", 
+            "keng daryo bo'yida", "o'z uyingizning yerto'lasida", "ishxonadagi lift ichida", 
+            "shifoxonaning sovuq palatasida", "mashina o'rindig'ida", "poezd vagonida", 
+            "samolyot hojatxonasida", "kimsasiz orolda", "yerto'la zinapoyasida", 
+            "qalin o'rmon o'rtasida", "yerosti o'tish yo'lida", "cho'l o'rtasida", 
+            "muzlagan ko'l ustida", "baland qoyalar ustida", "omborxonada", "zinapoyada",
+            "avtomobil turargohida", "eski qabristonda", "ko'prik ostida"
+        ];
 
-            const deathYear = currentYear + yearsLeft;
-            const deathAge = currentAge + yearsLeft;
-            const mm = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-            const dd = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
-            
-            return {
-                formattedDate: `${dd}.${mm}.${deathYear}`,
-                deathAge: deathAge
-            };
+        const causes = [
+            "mashina urib ketib", "kutilmaganda yonib ketib", "suvga cho'kib ketib", 
+            "balandlikdan yiqilib", "yurak xurujidan", "zaharli ilon chaqib", 
+            "qotilning sovuq qurolidan", "tasodifiy o'q tegib", "kuchli tok urib", 
+            "muzlab qolib", "ochlik va suvsizlikdan", "nafas qisib", 
+            "yovvoyi hayvonlar hujum qilib", "kuchli portlash qurboni bo'lib", 
+            "zaharli gazdan bo'g'ilib", "boshga og'ir jism tushib", "qorong'ida qoqinib ketib",
+            "o'z qo'lingiz bilan", "avtohalokat tufayli majag'lanib", "sirli kasallikka chalinib",
+            "chilla vaqtida oftob urib", "yashindek tez kelgan o'lim farishtasidan"
+        ];
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
 
-        async function fetchDeathScenarioFromGemini(name, age) {
-            const prompt = `Sen mistik va qo'rqinchli o'lim generatorisan. Foydalanuvchi ismi ${name}, yoshi ${age}. Men uchun 1 ta qo'rqinchli va kutilmagan joy (location) va 1 ta o'lim sababini (cause) o'zbek tilida o'ylab top. 
-            'cause' (o'lim sababi) qismi "o'lasan" so'ziga gramatik jihatdan bog'lanadigan shaklda bo'lsin (masalan: "kuchli yong'in ichida qolib", "noma'lum sharpalar hamlasiga uchrab", "yurak xurujidan").
-            JSON formatida qaytar.`;
+        function calculateDeathDate(currentAge) {
+            const baseDate = new Date(2026, 7, 1); // 1-Avgust 2026
+            let yearsLeft = 85 - currentAge;
+            if (yearsLeft < 1) yearsLeft = 2; // Agar yoshi juda katta bo'lsa
+            
+            const randomDaysLeft = Math.floor(Math.random() * (yearsLeft * 365));
+            const deathDate = new Date(baseDate.getTime() + (randomDaysLeft * 24 * 60 * 60 * 1000));
+            
+            const dd = String(deathDate.getDate()).padStart(2, '0');
+            const mm = String(deathDate.getMonth() + 1).padStart(2, '0');
+            const yyyy = deathDate.getFullYear();
+            
+            const deathAge = currentAge + Math.floor(randomDaysLeft / 365);
+            return { formattedDate: `${dd}.${mm}.${yyyy}`, deathAge: deathAge };
+        }
 
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            "location": { "type": "STRING", "description": "Qo'rqinchli, kimsasiz yoki g'alati joy" },
-                            "cause": { "type": "STRING", "description": "O'lim sababi, 'o'lasan' so'ziga moslashgan" }
-                        },
-                        required: ["location", "cause"]
-                    }
-                }
+        function getDeathScenario() {
+            return {
+                location: getRandomElement(locations),
+                cause: getRandomElement(causes)
             };
-
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                const result = await response.json();
-                if (result.candidates && result.candidates[0].content.parts[0].text) {
-                    return JSON.parse(result.candidates[0].content.parts[0].text);
-                }
-            } catch (error) {
-                // Agar API ishlamay qolsa (internet uzilsa) zaxira stsenariy
-                return {
-                    location: "kimsasiz qorong'i xonada",
-                    cause: "kutilmagan sirli sabablarga ko'ra"
-                };
-            }
         }
 
         generateBtn.addEventListener('click', async () => {
             if (attempts >= 3) {
-                resultDiv.innerHTML = "<br><span class='highlight' style='font-size:36px; text-transform:uppercase;'>Bo'ldi endi, o'zingni aldama...</span>";
-                generateBtn.disabled = true;
-                generateBtn.textContent = "Yakun topdi";
-                
-                document.body.style.animation = "glitch 0.2s infinite";
-                setTimeout(() => { document.body.style.animation = ""; }, 1000);
+                resultDiv.innerHTML = "<span style='color:#00ff7f; font-size:26px;'>Bo'ldi endi, o'zingni aldama!</span>";
+                generateBtn.style.display = 'none';
                 return;
             }
 
@@ -422,25 +342,24 @@
             const ageInput = document.getElementById('userAge').value;
             
             if (!name || !ageInput) {
-                resultDiv.innerHTML = "<span style='color:red;'>Ism va yoshingizni kiritishingiz shart...</span>";
+                resultDiv.innerHTML = "<span style='color:#00ff7f;'>Ism va yoshingizni kiritishingiz shart...</span>";
                 return;
             }
 
             const currentAge = parseInt(ageInput);
             
-            // Tugmani bloklash va kuttirish rejimiga o'tkazish
             generateBtn.disabled = true;
             generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
             resultDiv.innerHTML = "";
 
             try {
-                // Matematik yosh va sana hisobi
-                const dateData = calculateDeathDate(currentAge);
+                // Ruhlar bilan bog'lanish effektini berish uchun vaqtinchalik kutish
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                // Gemini orqali tasodifiy kutilmagan ssenariy olish
-                const scenario = await fetchDeathScenarioFromGemini(name, currentAge);
+                const dateData = calculateDeathDate(currentAge);
+                const scenario = getDeathScenario();
 
-                // Natijani ko'rsatish
+                // Natijani ekranga ko'rsatish
                 resultDiv.innerHTML = `
                     <span class="name-highlight">${name}</span>... <br><br> 
                     Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span>, <br> 
@@ -449,18 +368,14 @@
                     <span class="god-knows">... yana Xudo biladi.</span>
                 `;
                 
-                // Ekran titrashi
-                document.body.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
-                setTimeout(() => document.body.style.transform = 'translate(0,0)', 150);
-
                 attempts++;
             } finally {
-                // Agar 3 martadan oshmagan bo'lsa, tugmani yana ochish
-                if (attempts < 3) {
-                    generateBtn.disabled = false;
-                    generateBtn.textContent = "O'lim generatori";
-                } else {
-                    generateBtn.textContent = "Yakun topdi";
+                generateBtn.disabled = false;
+                generateBtn.textContent = "O'lim generatori";
+                
+                if (attempts >= 3) {
+                    generateBtn.disabled = true;
+                    generateBtn.textContent = "Yakunlandi";
                 }
             }
         });
