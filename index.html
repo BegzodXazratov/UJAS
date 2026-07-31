@@ -15,102 +15,123 @@
 
         body {
             background-color: #000;
+            /* Sirli qora-yashil o'rmon foni */
             background-image: 
                 linear-gradient(to bottom, rgba(0, 30, 0, 0.7), rgba(0, 0, 0, 1)),
-                url('https://images.unsplash.com/photo-1505635552518-3448ff116af3?q=80&w=2000&auto=format&fit=crop');
+                url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            color: #00ff7f; /* Asosiy rang yashil-qora vibe uchun */
+            background-attachment: fixed;
+            color: #00ff7f;
             font-family: 'Roboto', sans-serif;
-            height: 100vh;
+            /* Mobil qurilmalar uchun dinamik balandlik va skroll */
+            min-height: 100dvh; 
+            padding: 40px 15px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto; 
             position: relative;
         }
 
-        /* Qon tomchilari yozayotganda oqib tushadi */
+        .window-glass {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+        }
+
+        .glitch-effect {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 20, 0, 0.1),
+                rgba(0, 20, 0, 0.1) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
         .blood-drop {
-            position: absolute;
+            position: fixed;
             width: 4px;
-            height: 25px;
-            background: linear-gradient(to bottom, rgba(139,0,0,0), rgba(200,0,0,0.8), rgba(255,0,0,1));
-            border-radius: 50%;
-            animation: dropFall linear forwards;
+            height: 15px;
+            /* Haqiqiy qizil qon rangi */
+            background: linear-gradient(to bottom, rgba(200,0,0,0), rgba(200,0,0,0.7), rgba(150,0,0,1));
+            border-radius: 0 0 50% 50%;
+            animation: bloodFall linear forwards;
             z-index: 5;
             pointer-events: none;
             opacity: 0;
-            filter: drop-shadow(0 0 3px #ff0000);
+            filter: drop-shadow(0 0 2px #ff0000);
         }
 
-        @keyframes dropFall {
+        @keyframes bloodFall {
             0% { top: -20px; opacity: 0; height: 10px;}
             10% { opacity: 0.9; height: 40px;}
-            80% { opacity: 0.8; height: 100px;}
-            100% { top: 110vh; opacity: 0; height: 200px; }
+            80% { opacity: 0.7; height: 100px;}
+            100% { top: 110vh; opacity: 0; height: 150px; }
         }
 
-        /* --- Jumpscare (Oxirgi qonli ekran) --- */
         #jumpscare-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #aa0000;
+            background-color: #550000;
+            /* Haqiqiy qon sachragan effekt (Gradientlar yordamida) */
+            background-image: 
+                radial-gradient(circle at 50% 50%, #ff0000 0%, transparent 70%),
+                radial-gradient(circle at 20% 30%, #cc0000 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #990000 0%, transparent 60%),
+                radial-gradient(circle at 10% 90%, #aa0000 0%, transparent 55%);
             z-index: 9999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            overflow: hidden;
-            animation: intenseShake 0.1s infinite;
+            animation: bloodSplash 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, shake 0.4s infinite;
         }
 
-        .blood-splatter {
-            position: absolute;
-            background: radial-gradient(circle, #ff0000 0%, #8b0000 40%, transparent 70%);
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            opacity: 0;
-            animation: splashOut 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
-        @keyframes splashOut {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(4); opacity: 0.9; }
+        @keyframes bloodSplash {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         #jumpscare-overlay h1 {
             font-family: 'Nosifer', cursive;
-            font-size: 80px;
+            /* Ekran hajmiga qarab moslashuvchi shrift: Telefonlarda qirqilmaydi */
+            font-size: clamp(35px, 10vw, 80px); 
             color: #000;
-            text-shadow: 0 0 30px #fff, 0 0 50px #ff0000;
+            text-shadow: 0 0 20px #fff;
             text-transform: uppercase;
             text-align: center;
-            z-index: 10001;
-            animation: popText 0.3s ease-out forwards;
+            padding: 0 20px;
         }
 
-        @keyframes popText {
-            0% { transform: scale(0.1); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            10% { transform: translate(-2px, -3px) rotate(-1deg); }
+            20% { transform: translate(-4px, 0px) rotate(1deg); }
+            30% { transform: translate(4px, 3px) rotate(0deg); }
+            40% { transform: translate(2px, -2px) rotate(1deg); }
+            50% { transform: translate(-2px, 3px) rotate(-1deg); }
+            60% { transform: translate(-4px, 2px) rotate(0deg); }
+            70% { transform: translate(4px, 2px) rotate(-1deg); }
+            80% { transform: translate(-2px, -2px) rotate(1deg); }
+            90% { transform: translate(2px, 3px) rotate(0deg); }
+            100% { transform: translate(2px, -3px) rotate(-1deg); }
         }
 
-        @keyframes intenseShake {
-            0% { transform: translate(3px, 3px) rotate(0deg); }
-            25% { transform: translate(-3px, -4px) rotate(-1deg); }
-            50% { transform: translate(-4px, 2px) rotate(1deg); }
-            75% { transform: translate(4px, -2px) rotate(-1deg); }
-            100% { transform: translate(-2px, 3px) rotate(0deg); }
-        }
-
-        /* --- Asosiy oyna dizayni --- */
         #start-btn {
-            padding: 20px 50px;
-            font-size: 26px;
+            padding: 20px 40px;
+            font-size: clamp(20px, 5vw, 26px);
             font-family: 'Nosifer', cursive;
             color: #006400;
-            background: rgba(0, 20, 0, 0.6);
+            background: rgba(0, 20, 0, 0.8);
             border: 2px solid #006400;
             cursor: pointer;
             z-index: 10;
@@ -123,9 +144,9 @@
         #start-btn:hover {
             color: #00ff7f;
             border-color: #00ff7f;
-            background: rgba(0, 50, 0, 0.8);
-            box-shadow: 0 0 50px rgba(0, 255, 127, 0.8), inset 0 0 20px rgba(0, 255, 127, 0.3);
-            transform: scale(1.1);
+            background: rgba(0, 50, 0, 0.9);
+            box-shadow: 0 0 50px rgba(0, 255, 127, 0.8);
+            transform: scale(1.05);
         }
 
         #generator-modal {
@@ -133,26 +154,27 @@
             flex-direction: column;
             background: rgba(0, 15, 0, 0.95); 
             border: 1px solid #004d00;
-            padding: 40px;
+            padding: 30px;
             border-radius: 15px;
             z-index: 10;
             box-shadow: 0 0 60px rgba(0, 255, 127, 0.2);
-            width: 90%;
-            max-width: 600px;
+            width: 100%;
+            max-width: 500px;
             text-align: center;
-            animation: fadeIn 1.5s ease-in;
+            animation: fadeIn 1s ease-in;
+            margin: auto; 
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        #generator-modal h1 {
+        h1 {
             font-family: 'Creepster', cursive;
-            font-size: 40px;
+            font-size: clamp(32px, 8vw, 40px);
             color: #00ff7f;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-shadow: 3px 3px 10px #000, 0 0 20px #006400;
             letter-spacing: 2px;
         }
@@ -160,8 +182,8 @@
         input {
             width: 100%;
             padding: 15px;
-            margin-bottom: 25px;
-            background: #0a140a;
+            margin-bottom: 20px;
+            background: #051005;
             border: 1px solid #003300;
             color: #00ff7f;
             font-size: 18px;
@@ -172,61 +194,52 @@
         }
 
         input:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            background: #1a0505;
+            border-color: #00ff7f;
+            box-shadow: 0 0 15px rgba(0, 255, 127, 0.4);
+            background: #0a150a;
         }
 
         #generate-btn {
             width: 100%;
             padding: 15px;
-            font-size: 22px;
+            font-size: 20px;
             font-family: 'Creepster', cursive;
             color: #000; 
             background: #008000;
             border: none;
             cursor: pointer;
             transition: 0.3s;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             border-radius: 5px;
             box-shadow: 0 0 10px #00ff7f;
         }
 
-        #generate-btn:hover:not(:disabled) {
+        #generate-btn:hover {
             background: #00ff7f;
-            box-shadow: 0 0 30px #00ff7f;
+            box-shadow: 0 0 25px #00ff7f;
             transform: scale(1.02);
         }
 
-        #generate-btn:disabled {
-            background: #113311;
-            color: #336633;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         #result {
-            margin-top: 35px;
-            font-size: 20px;
+            margin-top: 30px;
+            font-size: 18px;
             line-height: 1.6;
             color: #e6e6e6;
-            text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
-            min-height: 80px;
+            text-shadow: 0 0 8px rgba(0, 255, 127, 0.3);
             text-align: left;
         }
         
         .highlight {
-            color: #ff3333;
+            color: #00ff7f;
             font-weight: bold;
-            font-size: 24px;
-            text-shadow: 0 0 15px #ff0000;
+            font-size: 20px;
+            text-shadow: 0 0 10px #00ff7f;
         }
 
         .name-highlight {
             color: #00ff7f;
             font-family: 'Creepster', cursive;
-            font-size: 32px;
+            font-size: 28px;
             letter-spacing: 1px;
             display: block;
             margin-bottom: 15px;
@@ -235,28 +248,18 @@
 
         .god-knows {
             display: block;
-            margin-top: 30px;
-            font-size: 18px;
+            margin-top: 25px;
+            font-size: 16px;
             font-style: italic;
             color: #55aa55;
             text-align: right;
-        }
-        
-        .loading-text {
-            color: #00ff7f;
-            font-style: italic;
-            animation: pulse 1s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            from { opacity: 0.5; }
-            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div id="audio-container" style="display:none;"></div>
+    <div class="window-glass"></div>
+    <div class="glitch-effect"></div>
 
     <button id="start-btn">Eshikni Ochish...</button>
 
@@ -277,44 +280,51 @@
         const modal = document.getElementById('generator-modal');
         const generateBtn = document.getElementById('generate-btn');
         const resultDiv = document.getElementById('result');
-        const audioContainer = document.getElementById('audio-container');
         const inputs = document.querySelectorAll('input');
         const jumpscareOverlay = document.getElementById('jumpscare-overlay');
 
         let attempts = 0; 
         const MAX_ATTEMPTS = 3;
         
+        const bgMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_f52313d312.mp3?filename=dark-ambient-116675.mp3');
+        bgMusic.loop = true; 
+        
+        const screamAudio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_5502b4d241.mp3?filename=woman-scream-117865.mp3');
+        screamAudio.volume = 1.0;
+
         function createBloodDrop() {
             const drop = document.createElement('div');
             drop.classList.add('blood-drop');
+            // Ekranning ixtiyoriy joyidan oqib tushadi
             drop.style.left = Math.random() * 100 + 'vw';
             
             const sizeMultiplier = Math.random() * 1.5 + 0.5;
             drop.style.transform = `scale(${sizeMultiplier})`;
             
-            drop.style.animationDuration = (Math.random() * 1.5 + 0.8) + 's'; 
+            drop.style.animationDuration = (Math.random() * 2 + 1) + 's'; 
+            drop.style.animationDelay = '0s';
             
             document.body.appendChild(drop);
-            setTimeout(() => { drop.remove(); }, 2500);
+            setTimeout(() => { drop.remove(); }, 3500);
         }
 
-        // Qon faqat inputlarga nimadir yozilganda ekrandan oqib tushadi
+        // Qon faqat yozayotganda oqadi
         inputs.forEach(input => {
             input.addEventListener('input', () => {
-                for(let i=0; i<3; i++) {
+                for(let i=0; i<2; i++) {
                     createBloodDrop();
                 }
             });
         });
 
         startBtn.addEventListener('click', () => {
-            audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/MPa-y1LQjOk?autoplay=1&loop=1&playlist=MPa-y1LQjOk" frameborder="0" allow="autoplay"></iframe>`;
+            bgMusic.play().catch(e => console.log("Audio ruxsati kerak"));
             startBtn.style.display = 'none';
             modal.style.display = 'flex';
         });
 
         function calculateDeathDate(currentAge) {
-            const baseDate = new Date(2026, 7, 1);
+            const baseDate = new Date(2026, 7, 1); // 2026 yil 1 Avgust
             
             let maxLifespan = 85; 
             if (currentAge >= 80) maxLifespan = currentAge + 5;
@@ -322,9 +332,9 @@
             let yearsLeft = maxLifespan - currentAge;
             if (yearsLeft < 1) yearsLeft = 1; 
 
-            // Tasodifiy erta o'lim ehtimoli
-            if (Math.random() < 0.25 && yearsLeft > 5) {
-                yearsLeft = Math.floor(Math.random() * 5) + 1;
+            // Yosh bo'lsa ham kutilmaganda barvaqt vafot etish ehtimoli
+            if (Math.random() < 0.25 && yearsLeft > 10) {
+                yearsLeft = Math.floor(Math.random() * 15) + 1;
             }
 
             const randomDaysLeft = Math.floor(Math.random() * (yearsLeft * 365));
@@ -342,88 +352,108 @@
             modal.style.display = 'none';
             jumpscareOverlay.style.display = 'flex';
             
-            // Orqadagi YouTube musiqasini o'chirib, Dahshatli qichqiriqni yoqamiz
-            audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/4JvJd6BkBJ4?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
-            
-            // Ekranga qon dog'larini sachratamiz
-            for(let i=0; i<30; i++) {
-                let splatter = document.createElement('div');
-                splatter.classList.add('blood-splatter');
-                splatter.style.width = (Math.random() * 200 + 100) + 'px';
-                splatter.style.height = (Math.random() * 200 + 100) + 'px';
-                splatter.style.left = (Math.random() * 100 - 10) + 'vw';
-                splatter.style.top = (Math.random() * 100 - 10) + 'vh';
-                splatter.style.animationDelay = (Math.random() * 0.2) + 's';
-                jumpscareOverlay.appendChild(splatter);
-            }
+            bgMusic.pause();
+            screamAudio.play().catch(e => console.log("Ovoz bloklandi"));
         }
 
-        const storyParts = {
-            locations: [
-                "o'z uyingdagi issiq o'rningda", "serqatnov ko'cha chorrahasida", 
-                "ishxonangdagi kompyuter qarshisida", "katta trassada mashina rulida", 
-                "tungi kimsasiz yo'lda", "oshxonada ovqat tayyorlayotganingda", 
-                "issiq hammomda cho'milayotganingda", "metro bekatida poyezd kutayotib", 
-                "shahar markazidagi xiyobonda", "havoga ko'tarilgan samolyot salonida", 
-                "uzoq safarga chiqqan poyezd vagonida", "kasalxonaning sovuq palatasida", 
-                "baland qoyalar ustida sayr qilib yurganda", "chuqur suv havzasida suzayotganda", 
-                "avtomobil turargohida mashinangni kutib", "qurilishi tugallanmagan bino oldida",
-                "do'konda navbatda turganingda", "eski va chirigan ko'prik ustida",
-                "qishning qahraton sovuq ko'chasida", "qorong'i va yoritilmagan tor ko'chada",
-                "uyingning balkonida havo olayotib", "piyodalar o'tish yo'lagida",
-                "toqqa chiqish vaqtida tepalikda", "restoranda xotirjam ovqatlanib o'tirganingda",
-                "gaz quyish shoxobchasida"
-            ],
-            events: [
-                "katta tezlikda kelayotgan tormozi buzuq yuk mashinasi seni majag'lab ketadi",
-                "yeyayotgan ovqating tomog'ingga tiqilib, nafas ololmay qolasan",
-                "kuchli qisqa tutashuv oqibatida minglab voltli tok urib, yuraging to'xtaydi",
-                "is gazidan zaharlanib, butunlay xushsiz holatda narigi dunyoga ravona bo'lasan",
-                "balandlikdan muvozanatni yo'qotib, boshing bilan beton ustiga qulab tushasan",
-                "ko'chada ketayotganingda tepadan juda og'ir temir bo'lagi to'g'ri ustingga tushadi",
-                "to'satdan kuchli yurak xuruji (infarkt) tutib, yordam so'rashga ulgurolmaysan",
-                "qattiq zaharlanish oqibatida ichki a'zolaring bir necha daqiqada ishdan chiqadi",
-                "kutilmagan va dahshatli yong'in ichida qamalib, tutundan bo'g'ilib qolasan",
-                "avtohalokat tufayli mashina ichida pachoqlanib ketasan",
-                "oyog'ing tortishib qolib, suv ostiga cho'kib g'arq bo'lasan",
-                "kuchli allergik reaksiya (anafilaktik shok) berib, nafas yo'llaring yopilib qoladi",
-                "gaz baloni portlashi natijasida tanang tanib bo'lmas darajada kuyib ketadi",
-                "muzlagan va sirpanchiq yo'lda yiqilib, o'tkir burchakka urilasan",
-                "yer silkinishi oqibatida qulagan devor plitalari ostida qolib ketasan",
-                "baxtsiz tasodif tufayli qoninga zaharli infeksiya tushib, butun tanang shishib ketadi",
-                "qattiq shamol uchirgan shisha siniqlari tomog'ingni kesib o'tadi",
-                "adashib yuqori dozali dori ichib qo'yib, miyang faoliyatini to'xtatadi",
-                "zaharli ilon yoki chayon chaqishi oqibatida qoning qotib qoladi",
-                "kuchli qon bosimi oshishi (insult) tufayli miyanga qon quyilib yiqilasan",
-                "o'rmonda yovvoyi itlar yoki bo'rilar galasiga duch kelib, g'ajib tashlanasan",
-                "samolyot dvigateli ishdan chiqib, minglab metr balandlikdan pastga qulaysan",
-                "poyezd relsdan chiqib ketib, vagonning og'ir temirlari ostida ezilasan",
-                "boshqaruvni yo'qotgan mast haydovchi seni to'g'ridan-to'g'ri urib uchirib yuboradi",
-                "qorong'ida yashiringan qotilning pichog'iga tasodifiy o'lja bo'lib qolasan"
-            ],
-            conclusions: [
-                "Hamma narsa bir soniyada sodir bo'ladi va ko'zlaring mangu yumiladi.",
-                "So'nggi nafasingni olayotganda atrofingdagi odamlar senga yordam bera olmaydi.",
-                "O'sha lahzada faqat qattiq og'riq va cheksiz zulmatni his qilasan.",
-                "Tez yordam yetib kelguncha tanang allaqachon muzlab ulgurgan bo'ladi.",
-                "Yuzingda o'lim dahshati mangu qotib qoladi.",
-                "Hech kim sening so'nggi dod-faryodingni eshitmaydi.",
-                "Bu oddiygina tasodif sening umringga kutilmaganda fojiali nuqta qo'yadi.",
-                "O'liming shunchalik kutilmagan bo'ladiki, yaqinlaring shokka tushib qoladi.",
-                "Bu fojiadan so'ng tanangni tanib olishning imkoni bo'lmaydi.",
-                "Sening bu dunyodagi vaqting aynan shu sovuq joyda yakun topadi."
-            ]
-        };
+        // API ishlamasa ham minglab xilma-xil stsenariylar yaratib beradi.
+        const introWords = [
+            "hech narsadan bexabar", "ko'zlaring quvonchga to'lib", "shoshilgancha", 
+            "chuqur o'yga tolib", "kutilmaganda", "odatiy kuningni o'tkazayotib", 
+            "hayotdan zerikib", "uxlashga tayyorgarlik ko'rayotib", "kimnidir kutib",
+            "yomg'irli kunda", "qalin tuman ichida", "issiq yoz oqshomida",
+            "yangi reja tuzayotgan paytingda", "juda charchagan holatda",
+            "telefonga termulib", "ishdan charchab qaytayotganingda", 
+            "yangi kiyim kiyib, oyna oldida turganingda", "yaqinlaring bilan kulishib o'tirgan payting", 
+            "g'alati tushdan cho'chib uyg'onganingda", "quloqchinlarda sevimli musiqangni tinglab", 
+            "osmonga qarab yulduzlarni sanayotganingda", "hech kim yo'qligidan foydalanib", 
+            "ichingda g'alati qorquvni his qilib", "kim bilandir urishib qolib, asabiy holatda", 
+            "shirin ovqat tanovul qilayotganingda", "qorong'ida yorug'lik qidirib", 
+            "do'stlaringga xabar yozayotgan paytingda", "ko'zgudagi aksingga uzoq termulib qolganda", 
+            "yangi orzular qilib, jilmayganingda", "kuchli shamol yuzingga urilayotganda", 
+            "biror narsani yo'qotib qo'yib, asabiylashib qidirayotganda", "jimgina derazadan tashqariga tikilib", 
+            "yo'lni kesib o'tishga tayyorlanayotganingda", "hech qanday yomonlikni sezmay", 
+            "o'zingni dunyodagi eng baxtli insondek his qilib", "eski rasmlarni ko'rib, xotiralarga berilib", 
+            "esdan chiqib qolgan muhim ishni eslaganingda", "kutilmagan qo'ng'iroqqa javob berayotib", 
+            "mashina oynasidan shamol qilib ketayotganingda", "chuqur uxlashga yotganingda"
+        ];
+
+        const locations = [
+            "katta trassadan o'tayotganingda", "o'z uyingning hammomida", "qorong'i xiyobonda", 
+            "ishxonadagi zinapoyada", "odamgavjum bekatda", "tor va qorong'i ko'chada", 
+            "shifoxona yo'lagida", "poezd vagonida", "nam va sovuq yerto'lada", 
+            "uzun ko'prik ustida", "mashina o'rindig'ida", "eski tashlandiq binoda",
+            "osmono'par binoning tomida", "ko'l bo'yida", "toqqa chiqqaningda",
+            "aeroport kutish zalida", "yangi qurilayotgan obyekt yonida",
+            "shovqinli restoranda", "bo'm-bo'sh yerosti yo'lida", "kimsasiz parkda", 
+            "o'z yotog'ingda", "mehmonxona xonasida", "qabriston yonidan o'tayotganda", 
+            "tun yarmida oshxonada", "sportzalda mashq qilayotganda", "katta savdo markazining eskalatorida", 
+            "kinoteatrning eng oxirgi qatorida", "bankomat oldida pul yechayotganingda", 
+            "sovuq va qorong'i garajda", "dengiz sohilida", "eski chang bosgan chordoqda", 
+            "metro vagonida", "yoqilg'i quyish shoxobchasida", "qalin o'rmon oralab ketayotganingda", 
+            "hovlidagi eski daraxt tagida", "balkonda havoga chiqib turganingda", "ta'mirtalab kvartirada", 
+            "shahar tashqarisidagi kimsasiz yo'lda", "katta avtobusning orqa o'rindig'ida", 
+            "kimyoviy laboratoriyada", "bo'sh qolgan basseyn ichida", "eski kasalxonaning tashlandiq qismida", 
+            "tiqilinch bozorda", "kimsasiz orolda", "yashirin savdo joyida", 
+            "uzoq qarindoshingning eski uyida", "baland sharshara yonida", "kutubxonaning eng qorong'i burchagida", 
+            "oynalari singan eski vagon ichida", "chirog'i o'chgan ko'p qavatli uyning podyezdida"
+        ];
+
+        const causes = [
+            "boshqaruvni yo'qotgan yuk mashinasi ostida qolib", "tepadan tushgan og'ir beton bo'lagidan zarba yeb", 
+            "kuchli tok urishi natijasida tanang yonib ketib", "yuraging to'satdan to'xtab qolib", 
+            "kutilmagan hujum va sovuq qurol jarohatidan", "nafas yo'lingga bir narsa tiqilib qolib", 
+            "kuchli yong'in ichida qochishga yo'l topolmay", "noma'lum portlash zarbasiga uchrab", 
+            "zinadan yomon yiqilib bo'yning sinishi oqibatida", "chuqur suvga cho'kib nafasololmay", 
+            "is gazidan zaharlanib", "noma'lum va davosiz virus sabab",
+            "avtohalokatda mashina pachoqlanishidan", "yuqori qon bosimi va insultdan",
+            "juda kuchli stressdan miyangga qon quyilib", "kutilmagan yovvoyi hayvon hujumidan",
+            "kuchli zaharli o'rgimchak chaqib olishidan", "kislota to'kilishi oqibatida", 
+            "asab tiziming ishdan chiqib qotib qolib", "tomog'ingga shisha sinig'i sanchilib", 
+            "yuqori balandlikdan pastga qulab", "ko'rchak ichagi yorilib ketib qon yo'qotishdan", 
+            "kuchli chaqmoq urishidan", "ko'chkiga duch kelib tuproq ostida qolib", 
+            "muz ustida sirpanib qattiq yerga bosh urib", "g'irt mast haydovchining qurboni bo'lib", 
+            "tuzalmas qon kasalligiga chalinib", "issiq xonada kislorod yetishmasligidan", 
+            "zaharli kimyoviy modda hidlab qo'yib", "tormozi ishlamagan poyezd ostida qolib", 
+            "kuchli allergik reaksiya dan (anafilaktik shok)", "og'ir temir buyum ostida qisilib qolib", 
+            "sovuqda muzlab qotib qolib", "notanish ovqatdan qattiq zaharlanib", 
+            "quturgan itlarning talashidan", "tomirga noto'g'ri ukol qilinishidan", 
+            "kuchli qon ketishini to'xtata olmay", "texnik nosozlik sabab qulab tushishidan", 
+            "oyna sinib arteriya tomiringni kesib ketishidan", "uzoq davom etgan ochlik va suvsizlikdan", 
+            "kuchli bosim ostida o'pkang yorilib ketishidan", "qorong'ida chuqur quduqqa tushib ketib", 
+            "chala pishgan go'shtdagi parazitlar miyangni zararlab", "xatoga yo'l qo'ygan jarroh tig'i ostida", 
+            "ko'r-ko'rona otilgan adashgan o'qdan", "gaz ballonining to'satdan portlashidan", 
+            "noto'g'ri isitish tizimidan chiqqan tutun tufayli", "qattiq sovuqda uxlab qolib boshqa uyg'onmay", 
+            "tasodifiy olomonda tiqilinch ostida qolib", "noma'lum kimyoviy moddadan tanang zaharlanib"
+        ];
+
+        const endings = [
+            "jon berasan.", "so'nggi nafasingni olasan.", "ko'zlaring mangu yumiladi.", 
+            "hayot bilan azobda vidolashasan.", "bu olamni jim tashlab ketasan.",
+            "hech kim senga yordam bera olmaydi.", "tuproqqa qorishasan.",
+            "qorachiqlaringda daxshat qotib qoladi.", "atrofingdagilar faqat dod-faryodingni eslab qolishadi.", 
+            "tanang muzdek qotib qoladi.", "ruhing azob bilan tanangni tark etadi.", 
+            "oxirgi so'zingni ham aytishga ulgurmaysan.", "qoning butun atrofni qizilga bo'yaydi.", 
+            "ko'zlaringdan yosh o'rniga qon oqadi.", "jəsədingni topishlariga oylab vaqt ketadi.", 
+            "yaqinlaring seni hech qachon bunday holda ko'rishni xohlamasdi.", "bu sening hayotingdagi eng uzun soniyalar bo'ladi.", 
+            "faqatgina shamol sening o'limingga guvoh bo'ladi.", "o'sha joy sening mangu qabringga aylanadi.", 
+            "shuncha orzularing bir soniyada kulga aylanadi.", "hayoting xuddi uzilgan kinotasmadek to'xtaydi.", 
+            "hech kim sening nima xis qilganingni tushunolmaydi.", "tanang qora tuproq ostiga kirishini kutib yotadi.", 
+            "faqat bo'g'iq ingrash sening so'nggi sasing bo'ladi.", "olam sening ko'zlaringda qop-qoraga aylanadi.", 
+            "ismi-sharifing faqat o'lim haqidagi qog'ozlarda qoladi.", "hayotingning so'nggi pərdasi shu tarzda yopiladi."
+        ];
 
         function generateUniqueStory(name) {
-            const loc = storyParts.locations[Math.floor(Math.random() * storyParts.locations.length)];
-            const evt = storyParts.events[Math.floor(Math.random() * storyParts.events.length)];
-            const conc = storyParts.conclusions[Math.floor(Math.random() * storyParts.conclusions.length)];
+            const intro = introWords[Math.floor(Math.random() * introWords.length)];
+            const loc = locations[Math.floor(Math.random() * locations.length)];
+            const cause = causes[Math.floor(Math.random() * causes.length)];
+            const end = endings[Math.floor(Math.random() * endings.length)];
             
-            return `${name}, sen ${loc}, kutilmaganda ${evt}. ${conc}`;
+            return `${name}, sen ${intro} ${loc}, ${cause} ${end}`;
         }
 
         generateBtn.addEventListener('click', () => {
+            // Agar 3 marta bosilgan bo'lsa (ya'ni attempts = 3 bo'lsa, bu 4-klik)
             if (attempts >= MAX_ATTEMPTS) {
                 triggerJumpscare();
                 return;
@@ -433,43 +463,32 @@
             const ageInput = document.getElementById('userAge').value;
             
             if (!name || !ageInput) {
-                resultDiv.innerHTML = "<span style='color:#ff0000;'>Ism va yoshingizni kiritishingiz shart... Hali vaqtingiz bor.</span>";
+                resultDiv.innerHTML = "<span style='color:#ff0000;'>Ism va yoshingizni kiritishingiz shart...</span>";
                 return;
             }
 
             const currentAge = parseInt(ageInput);
             
-            generateBtn.disabled = true;
-            generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
-            resultDiv.innerHTML = "<div class='loading-text'>Taqdir kitobi varaqlanmoqda...</div>";
+            const dateData = calculateDeathDate(currentAge);
+            const story = generateUniqueStory(name);
 
-            // Simulyatsiya qilingan kechikish
-            setTimeout(() => {
-                const dateData = calculateDeathDate(currentAge);
-                const story = generateUniqueStory(name);
-
-                resultDiv.innerHTML = `
-                    <span class="name-highlight">${name}</span>
-                    <div>Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span> olamdan o'tasiz.</div>
-                    <br>
-                    <div><i>"${story}"</i></div>
-                    <span class="god-knows">... yana Xudo biladi.</span>
-                `;
-                
-                attempts++;
-                
-                // BU YERDA XATO TUZATILDI: 
-                // Oldin "generateBtn.disabled = false" yozilmagani uchun tugma bosib bo'lmaydigan bo'lib qolayotgandi!
-                if (attempts === MAX_ATTEMPTS) {
-                    generateBtn.disabled = false; 
-                    generateBtn.textContent = "So'nggi haqiqat";
-                    generateBtn.style.backgroundColor = "#800000"; 
-                    generateBtn.style.color = "#fff";
-                } else {
-                    generateBtn.disabled = false;
-                    generateBtn.textContent = "O'lim generatori";
-                }
-            }, 1500);
+            resultDiv.innerHTML = `
+                <span class="name-highlight">${name}</span>
+                <div>Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span> olamdan o'tasiz.</div>
+                <br>
+                <div><i>"${story}"</i></div>
+                <span class="god-knows">... yana Xudo biladi.</span>
+            `;
+            
+            attempts++;
+            
+            // Agar 3 marta ishlatilgan bo'lsa, tugmani qo'rqinchli tusga kiritamiz
+            if (attempts === MAX_ATTEMPTS) {
+                generateBtn.textContent = "So'nggi haqiqatni bilish";
+                generateBtn.style.backgroundColor = "#550000"; 
+                generateBtn.style.color = "#fff";
+                generateBtn.style.boxShadow = "0 0 20px #ff0000";
+            }
         });
     </script>
 </body>
