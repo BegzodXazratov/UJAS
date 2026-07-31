@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taqdiringizni Biling</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Roboto:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #030000;
+            background-image: radial-gradient(circle at center, #1a0000 0%, #000000 80%);
+            color: #ff3333;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blood-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1505635552518-3448ff116af3?q=80&w=2000&auto=format&fit=crop') center/cover;
+            opacity: 0.2;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glitch-effect {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.2) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Haqiqiy qon tomchisi (Dumli) */
+        .blood-drip {
+            position: fixed;
+            top: -100px;
+            width: 14px;
+            height: 24px;
+            background: #8a0303;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset -3px -3px 5px rgba(0,0,0,0.6), 0 0 10px #ff0000;
+            z-index: 9999; /* Formaning ustidan oqishi uchun */
+            pointer-events: none;
+            animation: dripFall linear forwards;
+        }
+
+        .blood-drip::before {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 3px;
+            width: 8px;
+            height: 80px;
+            background: linear-gradient(to top, #8a0303, transparent);
+            z-index: -1;
+        }
+
+        @keyframes dripFall {
+            0% { top: -100px; opacity: 1; }
+            80% { opacity: 1; }
+            100% { top: 110vh; opacity: 0; }
+        }
+
+        /* Bosh suyagi animatsiyalari */
+        .skull-container {
+            position: fixed;
+            bottom: -300px;
+            left: 5%;
+            width: 180px;
+            z-index: 10000;
+            pointer-events: none;
+            animation: peekSkull 12s infinite;
+            filter: drop-shadow(0 0 20px #ff0000);
+        }
+
+        .skull-container.right {
+            left: auto;
+            right: -300px;
+            bottom: 30%;
+            animation: peekSkullRight 16s infinite 5s; /* Kechikib chiqadi */
+        }
+
+        @keyframes peekSkull {
+            0%, 80%, 100% { bottom: -300px; transform: rotate(-20deg); }
+            85% { bottom: -20px; transform: rotate(10deg); }
+            95% { bottom: -20px; transform: rotate(5deg); }
+        }
+
+        @keyframes peekSkullRight {
+            0%, 85%, 100% { right: -300px; transform: rotate(-90deg); }
+            90% { right: -20px; transform: rotate(-20deg); }
+            95% { right: -20px; transform: rotate(-25deg); }
+        }
+
+        #start-btn {
+            padding: 20px 50px;
+            font-size: 26px;
+            font-family: 'Nosifer', cursive;
+            color: #8b0000;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #8b0000;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        #start-btn:hover {
+            color: #ff0000;
+            border-color: #ff0000;
+            background: rgba(50, 0, 0, 0.8);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 1), inset 0 0 20px rgba(255, 0, 0, 0.5);
+            transform: scale(1.1);
+        }
+
+        #generator-modal {
+            display: none;
+            flex-direction: column;
+            background: rgba(5, 0, 0, 0.95);
+            border: 1px solid #5a0000;
+            padding: 40px;
+            border-radius: 15px;
+            z-index: 10;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 40px;
+            color: #ff1a1a;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 10px #000, 0 0 20px #8a0303;
+            letter-spacing: 2px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 25px;
+            background: #0a0a0a;
+            border: 1px solid #4d0000;
+            color: #ff4d4d;
+            font-size: 18px;
+            outline: none;
+            transition: 0.3s;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            background: #110000;
+        }
+
+        #generate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 22px;
+            font-family: 'Creepster', cursive;
+            color: #fff;
+            background: #800000;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 3px;
+            border-radius: 5px;
+            text-shadow: 1px 1px 5px #000;
+        }
+
+        #generate-btn:hover:not(:disabled) {
+            background: #b30000;
+            box-shadow: 0 0 30px #ff0000;
+            transform: scale(1.02);
+        }
+
+        #generate-btn:disabled {
+            background: #333;
+            color: #666;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #result {
+            margin-top: 35px;
+            font-size: 22px;
+            line-height: 1.6;
+            color: #e6e6e6;
+            text-shadow: 0 0 10px #ff0000;
+            min-height: 80px;
+        }
+        
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 26px;
+            text-shadow: 0 0 15px #ff0000;
+        }
+
+        .name-highlight {
+            color: #ff0000;
+            font-family: 'Creepster', cursive;
+            font-size: 32px;
+            letter-spacing: 1px;
+        }
+
+        .god-knows {
+            display: block;
+            margin-top: 20px;
+            font-size: 18px;
+            font-style: italic;
+            color: #888;
+            text-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blood-overlay"></div>
+    <div class="glitch-effect"></div>
+
+    <!-- Bosh suyaklari (Skulls) -->
+    <div class="skull-container">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <!-- Suyak shakli -->
+            <path fill="#110000" stroke="#5a0000" stroke-width="10" d="M256 32C150.3 32 64 118.3 64 224c0 62.4 29.8 117.7 75.6 152.1.2 55.7 39.8 63.9 116.4 63.9 77.2 0 115.4-8.8 116.4-63.9C418.2 341.7 448 286.4 448 224 448 118.3 361.7 32 256 32zm-64 256c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm128 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+            <!-- Ko'zlari (qizil miltillaydigan) -->
+            <circle cx="192" cy="240" r="15" fill="#ff0000">
+                <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="320" cy="240" r="15" fill="#ff0000">
+                <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Burun teshigi va tishlar -->
+            <path fill="#3a0000" d="M256 320c-17.7 0-32-14.3-32-32h64c0 17.7-14.3 32-32 32z"/>
+            <path stroke="#3a0000" stroke-width="8" stroke-linecap="round" d="M190 400 L210 370 M256 405 L256 375 M322 400 L302 370"/>
+        </svg>
+    </div>
+    
+    <div class="skull-container right">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#0a0000" stroke="#8a0000" stroke-width="12" d="M256 32C150.3 32 64 118.3 64 224c0 62.4 29.8 117.7 75.6 152.1.2 55.7 39.8 63.9 116.4 63.9 77.2 0 115.4-8.8 116.4-63.9C418.2 341.7 448 286.4 448 224 448 118.3 361.7 32 256 32zm-64 256c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm128 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+            <circle cx="192" cy="240" r="18" fill="#ff0000"/>
+            <circle cx="320" cy="240" r="18" fill="#ff0000"/>
+            <path fill="#4a0000" d="M256 320c-17.7 0-32-14.3-32-32h64c0 17.7-14.3 32-32 32z"/>
+        </svg>
+    </div>
+
+    <div id="audio-container" style="display:none;"></div>
+
+    <button id="start-btn">Eshikni Ochish...</button>
+
+    <div id="generator-modal">
+        <h1>Taqdiringiz bitilgan</h1>
+        <input type="text" id="userName" placeholder="Ismingizni kiriting..." required autocomplete="off">
+        <input type="number" id="userAge" placeholder="Yoshingizni kiriting..." required min="1" max="120">
+        <button id="generate-btn">O'lim generatori</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const modal = document.getElementById('generator-modal');
+        const generateBtn = document.getElementById('generate-btn');
+        const resultDiv = document.getElementById('result');
+        const audioContainer = document.getElementById('audio-container');
+        const inputs = document.querySelectorAll('input');
+
+        let attempts = 0; 
+        const currentYear = 2026;
+        
+        // Gemini API kaliti Canvas tomonidan taqdim etiladi
+        const apiKey = "";
+
+        function createBloodDrop() {
+            const drop = document.createElement('div');
+            drop.classList.add('blood-drip'); // Yangilangan sinf
+            drop.style.left = Math.random() * 95 + 'vw';
+            drop.style.animationDuration = Math.random() * 1.5 + 2.5 + 's'; 
+            
+            // Har bir qon tomchisining hajmini biroz o'zgartirish
+            const scale = Math.random() * 0.5 + 0.6;
+            drop.style.transform = `scale(${scale})`;
+
+            document.body.appendChild(drop);
+            
+            setTimeout(() => { drop.remove(); }, 4000);
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                let drops = Math.floor(Math.random() * 3) + 1;
+                for(let i=0; i<drops; i++) {
+                    createBloodDrop();
+                }
+            });
+        });
+
+        startBtn.addEventListener('click', () => {
+            audioContainer.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/MPa-y1LQjOk?autoplay=1&loop=1&playlist=MPa-y1LQjOk" frameborder="0" allow="autoplay"></iframe>`;
+            startBtn.style.display = 'none';
+            modal.style.display = 'flex';
+        });
+
+        function calculateDeathDate(currentAge) {
+            let yearsLeft = 0;
+            
+            if (currentAge >= 100) {
+                yearsLeft = Math.floor(Math.random() * 2) + 1;
+            } else {
+                let randomChance = Math.random();
+                if (randomChance < 0.65 && currentAge < 80) {
+                    let minDeathAge = Math.max(currentAge + 1, 65);
+                    let maxDeathAge = 85;
+                    yearsLeft = Math.floor(Math.random() * (maxDeathAge - minDeathAge + 1)) + (minDeathAge - currentAge);
+                } else if (randomChance < 0.90 && currentAge < 60) {
+                    yearsLeft = Math.floor(Math.random() * (65 - currentAge + 1)) + 1;
+                } else {
+                    let minDeathAge = Math.max(currentAge + 1, 85);
+                    yearsLeft = Math.floor(Math.random() * (105 - minDeathAge + 1)) + (minDeathAge - currentAge);
+                }
+            }
+
+            const deathYear = currentYear + yearsLeft;
+            const deathAge = currentAge + yearsLeft;
+            const mm = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            const dd = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+            
+            return {
+                formattedDate: `${dd}.${mm}.${deathYear}`,
+                deathAge: deathAge
+            };
+        }
+
+        async function fetchDeathScenarioFromGemini(name, age) {
+            const prompt = `Sen mistik va qo'rqinchli o'lim generatorisan. Foydalanuvchi ismi ${name}, yoshi ${age}. Men uchun 1 ta qo'rqinchli va kutilmagan joy (location) va 1 ta o'lim sababini (cause) o'zbek tilida o'ylab top. 
+            'cause' (o'lim sababi) qismi "o'lasan" so'ziga gramatik jihatdan bog'lanadigan shaklda bo'lsin (masalan: "kuchli yong'in ichida qolib", "noma'lum sharpalar hamlasiga uchrab", "yurak xurujidan").
+            JSON formatida qaytar.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "location": { "type": "STRING", "description": "Qo'rqinchli, kimsasiz yoki g'alati joy" },
+                            "cause": { "type": "STRING", "description": "O'lim sababi, 'o'lasan' so'ziga moslashgan" }
+                        },
+                        required: ["location", "cause"]
+                    }
+                }
+            };
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                if (result.candidates && result.candidates[0].content.parts[0].text) {
+                    return JSON.parse(result.candidates[0].content.parts[0].text);
+                }
+            } catch (error) {
+                // Agar API ishlamay qolsa (internet uzilsa) zaxira stsenariy
+                return {
+                    location: "kimsasiz qorong'i xonada",
+                    cause: "kutilmagan sirli sabablarga ko'ra"
+                };
+            }
+        }
+
+        generateBtn.addEventListener('click', async () => {
+            if (attempts >= 3) {
+                resultDiv.innerHTML = "<br><span class='highlight' style='font-size:36px; text-transform:uppercase;'>Bo'ldi endi, o'zingni aldama...</span>";
+                generateBtn.disabled = true;
+                generateBtn.textContent = "Yakun topdi";
+                
+                document.body.style.animation = "glitch 0.2s infinite";
+                setTimeout(() => { document.body.style.animation = ""; }, 1000);
+                return;
+            }
+
+            const name = document.getElementById('userName').value.trim();
+            const ageInput = document.getElementById('userAge').value;
+            
+            if (!name || !ageInput) {
+                resultDiv.innerHTML = "<span style='color:red;'>Ism va yoshingizni kiritishingiz shart...</span>";
+                return;
+            }
+
+            const currentAge = parseInt(ageInput);
+            
+            // Tugmani bloklash va kuttirish rejimiga o'tkazish
+            generateBtn.disabled = true;
+            generateBtn.textContent = "Ruhlar bilan bog'lanmoqda...";
+            resultDiv.innerHTML = "";
+
+            try {
+                // Matematik yosh va sana hisobi
+                const dateData = calculateDeathDate(currentAge);
+                
+                // Gemini orqali tasodifiy kutilmagan ssenariy olish
+                const scenario = await fetchDeathScenarioFromGemini(name, currentAge);
+
+                // Natijani ko'rsatish
+                resultDiv.innerHTML = `
+                    <span class="name-highlight">${name}</span>... <br><br> 
+                    Siz <b>${dateData.formattedDate}</b> yili, <span class="highlight">${dateData.deathAge} yoshingizda</span>, <br> 
+                    <b>${scenario.location}</b>, <br> 
+                    <b>${scenario.cause}</b> o'lasan.
+                    <span class="god-knows">... yana Xudo biladi.</span>
+                `;
+                
+                // Ekran titrashi
+                document.body.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
+                setTimeout(() => document.body.style.transform = 'translate(0,0)', 150);
+
+                attempts++;
+            } finally {
+                // Agar 3 martadan oshmagan bo'lsa, tugmani yana ochish
+                if (attempts < 3) {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = "O'lim generatori";
+                } else {
+                    generateBtn.textContent = "Yakun topdi";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
